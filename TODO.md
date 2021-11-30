@@ -15,7 +15,7 @@ Tasks in *italics* can be considered optional
   - [ ] Calibrate camera for custom data set
   - [ ] Run pipeline on custom dataset
 
-  - [] *Compare KLT to matching Harris features on the custom dataset. (Assumption, KLT may be significantly better due to repeated patterns)*
+  - [ ] *Compare KLT to matching Harris features on the custom dataset. (Assumption, KLT may be significantly better due to repeated patterns)*
 
 
 
