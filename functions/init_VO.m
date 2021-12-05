@@ -31,7 +31,7 @@ if matlab_imp > 0
     showMatchedFeatures(img0,img1,matchedPoints0,matchedPoints1);
     
     [F, inlier_idx] = estimateFundamentalMatrix(matchedPoints0,...
-                        matchedPoints1,'Method','RANSAC','NumTrials', 2000);
+                        matchedPoints1,'Method','RANSAC','NumTrials', 5000);
     inlier_sum = sum(inlier_idx);
     E = K'*F*K;
     [Rots, u3] = decomposeEssentialMatrix(E);
