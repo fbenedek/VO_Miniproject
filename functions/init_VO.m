@@ -6,12 +6,12 @@ function [keypoints, landmarks] = init_VO(img0, img1, K, patch_r)
 %               world frame is assumed to be the camera frame of img0
 
 % use matlab functions?
-matlab_imp = 1;
+matlab_imp = 0;
 
-num_kp = 300;
-harris_kappa = 0.08;
+num_kp = 100;
+harris_kappa = 0.04;
 nonmax_supression_radius = 16;
-match_lambda = 4;
+match_lambda = 20;
 
 
 if matlab_imp > 0
@@ -62,18 +62,18 @@ else
     plot(keypoints1(2,:), keypoints1(1,:),'o');
     hold off
     
-    descriptors0 = describeKeypoints(img0, keypoints0, patch_r*2);
-    descriptors1 = describeKeypoints(img1, keypoints1, patch_r*2);
+    descriptors0 = describeKeypoints(img0, keypoints0, patch_r);
+    descriptors1 = describeKeypoints(img1, keypoints1, patch_r);
     
     matches = matchDescriptors(descriptors1,descriptors0, match_lambda);
     indexPairs = matchFeatures(descriptors0',descriptors1','MatchThreshold',15);
     
-    % NOTE, at this point we convert from [row;col] to [x,y]
-%     matched_keypoints0 = flipud(keypoints0(:,matches(matches>0)));
-%     matched_keypoints1 = flipud(keypoints1(:,matches>0));
+    %NOTE, at this point we convert from [row;col] to [x,y]
+    matched_keypoints0 = flipud(keypoints0(:,matches(matches>0)));
+    matched_keypoints1 = flipud(keypoints1(:,matches>0));
 
-    matched_keypoints0 = flipud(keypoints0(:,indexPairs(:,1)));
-    matched_keypoints1 = flipud(keypoints1(:,indexPairs(:,2)));
+%     matched_keypoints0 = flipud(keypoints0(:,indexPairs(:,1)));
+%     matched_keypoints1 = flipud(keypoints1(:,indexPairs(:,2)));
 
     % plots the matched keypoints
     figure; 
