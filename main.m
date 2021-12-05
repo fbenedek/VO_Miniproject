@@ -63,6 +63,7 @@ end
 addpath('functions/');
 patch_r = 4;
 [kpt, ldm] = init_VO(img0, img1, K, patch_r);
+visualizeLandmarks(img1, kpt, ldm);
 
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;

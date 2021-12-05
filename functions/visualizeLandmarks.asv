@@ -1,0 +1,13 @@
+function visualizeLandmarks(img, keypoints,landmarks)
+%VISUALIZELANDMARKS Ploits the 3D landmarks
+c = linspace(1,10,size(keypoints,2));
+figure; 
+subplot(1,2,1);
+imagesc(img); hold on;
+scatter(keypoints(1,:)', keypoints(2,:)', ...
+    (landmarks(3,:)-min(landmarks(3,:)))/(max(landmarks(3,:))-min(landmarks(3,:)))*70, 'filled');
+hold off
+subplot(1,2,2);
+plot3(landmarks(1,:), landmarks(2,:), landmarks(3,:), 'o');
+end
+

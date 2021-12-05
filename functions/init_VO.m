@@ -6,7 +6,7 @@ function [keypoints, landmarks] = init_VO(img0, img1, K, patch_r)
 %               world frame is assumed to be the camera frame of img0
 
 % use matlab functions?
-matlab_imp = 0;
+matlab_imp = 1;
 
 num_kp = 300;
 harris_kappa = 0.08;
@@ -15,8 +15,8 @@ match_lambda = 4;
 
 
 if matlab_imp > 0
-    points0 = detectHarrisFeatures(img0);
-    points1 = detectHarrisFeatures(img1);
+    points0 = detectHarrisFeatures(img0, 'MinQuality', 0.001);
+    points1 = detectHarrisFeatures(img1, 'MinQuality', 0.001);
     
     [features0,valid_points0] = extractFeatures(img0,points0);
     [features1,valid_points1] = extractFeatures(img1,points1);
@@ -27,8 +27,8 @@ if matlab_imp > 0
     matchedPoints1 = valid_points1(indexPairs(:,2),:);
     
     % plot matched keypoints
-%     figure; 
-%     showMatchedFeatures(img0,img1,matchedPoints0,matchedPoints1);
+    figure; 
+    showMatchedFeatures(img0,img1,matchedPoints0,matchedPoints1);
     
     [F, inlier_idx] = estimateFundamentalMatrix(matchedPoints0,...
                         matchedPoints1,'Method','RANSAC','NumTrials', 2000);
@@ -52,28 +52,32 @@ else
     keypoints1 = selectKeypoints(harris1, num_kp, nonmax_supression_radius);
     
     % Plots the found harris corners
-%     figure(1);
-%     subplot(1,2,1);
-%     imshow(img0); hold on;
-%     plot(keypoints0(2,:), keypoints0(1,:),'o');
-%     hold off
-%     subplot(1,2,2);
-%     imshow(img1); hold on;
-%     plot(keypoints1(2,:), keypoints1(1,:),'o');
-%     hold off
+    figure(1);
+    subplot(1,2,1);
+    imshow(img0); hold on;
+    plot(keypoints0(2,:), keypoints0(1,:),'o');
+    hold off
+    subplot(1,2,2);
+    imshow(img1); hold on;
+    plot(keypoints1(2,:), keypoints1(1,:),'o');
+    hold off
     
-    descriptors0 = describeKeypoints(img0, keypoints0, patch_r);
-    descriptors1 = describeKeypoints(img1, keypoints1, patch_r);
+    descriptors0 = describeKeypoints(img0, keypoints0, patch_r*2);
+    descriptors1 = describeKeypoints(img1, keypoints1, patch_r*2);
     
     matches = matchDescriptors(descriptors1,descriptors0, match_lambda);
+    indexPairs = matchFeatures(descriptors0',descriptors1','MatchThreshold',15);
     
     % NOTE, at this point we convert from [row;col] to [x,y]
-    matched_keypoints0 = flipud(keypoints0(:,matches(matches>0)));
-    matched_keypoints1 = flipud(keypoints1(:,matches>0));
-    
+%     matched_keypoints0 = flipud(keypoints0(:,matches(matches>0)));
+%     matched_keypoints1 = flipud(keypoints1(:,matches>0));
+
+    matched_keypoints0 = flipud(keypoints0(:,indexPairs(:,1)));
+    matched_keypoints1 = flipud(keypoints1(:,indexPairs(:,2)));
+
     % plots the matched keypoints
-%     figure; 
-%     showMatchedFeatures(img0,img1,matched_keypoints0',matched_keypoints1');
+    figure; 
+    showMatchedFeatures(img0,img1,matched_keypoints0',matched_keypoints1');
     
     [F, inlier_idx] = estimateFundamentalMatrix(matched_keypoints0',...
                     matched_keypoints1','Method','RANSAC','NumTrials', 2000);
@@ -86,8 +90,8 @@ else
     
     % input has to be homogeneous coordinates. currently all we have is the
     % position in the image array.
-    kp0 = [keypoints0; ones(1,size(keypoints0,2))];
-    kp1 = [keypoints1; ones(1,size(keypoints1,2))];
+    kp0 = [matched_keypoints0; ones(1,size(matched_keypoints0,2))];
+    kp1 = [matched_keypoints1; ones(1,size(matched_keypoints1,2))];
     [R_CW, T_CW] = disambiguateRelativePose(Rots, u3, kp0, kp1, K, K);
     M1 = K * eye(3,4);
     M2 = K * [R_CW, T_CW];
