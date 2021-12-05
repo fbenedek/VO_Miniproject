@@ -3,9 +3,9 @@ A brief description of the tasks we will have to complete. Trying to make a bit 
 
 ## Tasks
 Tasks in *italics* can be considered optional
-  - [ ] Implementation of initialization with manual frame selection.
+  - [ ] Implementation of initialization with manual frame selection. (Mads)
   - [ ] *Investigation of automatic initialization*
-  - [ ] Match keypoints between two frames using KLT (see MATLAB vision.PointTracker) and reassociate ladmarks based on this.
+  - [ ] Match keypoints between two frames using KLT (see MATLAB vision.PointTracker) and reassociate ladmarks based on this. (Ben)
   - [ ] Experiment with `ransacLocalization` to find fitting inlier threshold.
   - [ ] Find new candidate keypoints *and ensure that these are distinct*
   - [ ] Track candidate keypoints and triangulate when appropriate.
