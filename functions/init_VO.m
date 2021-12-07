@@ -6,7 +6,7 @@ function [keypoints, landmarks] = init_VO(img0, img1, K, patch_r)
 %               world frame is assumed to be the camera frame of img0
 
 % use matlab functions?
-matlab_imp = 0;
+matlab_imp = 1;
 
 num_kp = 100;
 harris_kappa = 0.04;
@@ -15,11 +15,26 @@ match_lambda = 20;
 
 
 if matlab_imp > 0
-    points0 = detectHarrisFeatures(img0, 'MinQuality', 0.001);
-    points1 = detectHarrisFeatures(img1, 'MinQuality', 0.001);
+    points0 = detectHarrisFeatures(img0, 'MinQuality', 0.01);
+    points1 = detectHarrisFeatures(img1, 'MinQuality', 0.01);
+    
+%     tic;
+%     D = pdist2(points1.Location, points0.Location, 'cityblock', 'Smallest', 1);
+%     toc
     
     [features0,valid_points0] = extractFeatures(img0,points0);
     [features1,valid_points1] = extractFeatures(img1,points1);
+    
+    % Plots the found harris corners
+    figure(1);
+    subplot(1,2,1);
+    imshow(img0); hold on;
+    plot(valid_points0);
+    hold off
+    subplot(1,2,2);
+    imshow(img1); hold on;
+    plot(valid_points1);
+    hold off
     
     indexPairs = matchFeatures(features0,features1,'MatchThreshold',15);
     
@@ -31,7 +46,7 @@ if matlab_imp > 0
     showMatchedFeatures(img0,img1,matchedPoints0,matchedPoints1);
     
     [F, inlier_idx] = estimateFundamentalMatrix(matchedPoints0,...
-                        matchedPoints1,'Method','RANSAC','NumTrials', 5000);
+                        matchedPoints1,'Method','RANSAC','NumTrials', 2000);
     inlier_sum = sum(inlier_idx);
     E = K'*F*K;
     [Rots, u3] = decomposeEssentialMatrix(E);

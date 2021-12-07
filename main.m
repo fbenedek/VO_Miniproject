@@ -1,5 +1,5 @@
 %% Setup
-ds = 2; % 0: KITTI, 1: Malaga, 2: parking
+ds = 0; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -61,9 +61,33 @@ end
 
 
 addpath('functions/');
-patch_r = 4;
-[kpt, ldm] = init_VO(img0, img1, K, patch_r);
-visualizeLandmarks(img1, kpt, ldm);
+% patch_r = 4;
+% [kpt, ldm] = init_VO(img0, img1, K, patch_r);
+% visualizeLandmarks(img1, kpt, ldm);
+
+% having img1, img2 we will run our triangulation here
+[P_0, X_0, T_WC] = bootstrap(img0, img1, K);
+% img0, img1 are the images returned by the bootstrap_frames indexes
+% P_0 is a 2*K matrix containing the 2D positions of the keypoints on img0,
+% this will be the frame of the origin.
+% X_0 is a 3*K matrix containing the 3D positions of the keypoints
+
+% TODO init state of the estimation:
+[S, T_WC] = init_state(P_0, X_0, T_WC, img1);
+% P_0 is a 2*K matrix containing the 2D positions of the keypoints on img0
+% X_0 is a 3*K matrix containing the 3D positions of the keypoints
+% Twc_i is 4*4 matrix containing the current pose, now the pose of the
+% frame of img1 (can also be vectorized)
+% S_i is a struct, with the following fields:
+% P_i is a 2*K matrix containing the 2D positions of the keypoints on img1
+% X_i is a 3*K matrix containing the 3D positions of the keypoints
+% C_i is a 2*M matrix containing keypoints candidates from img1, which are
+% not similar to P_i but are Harris corners
+% F_i is a 2*M matrix and stores the first observations of new keypoint
+% candidates. Now it is identical to C_i.
+% Tau_i is a 12*M matrix containing the concatenated and vectorized
+% transformations from world frame to the camera frame of the first
+% observation of each candidate keypoint.
 
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;

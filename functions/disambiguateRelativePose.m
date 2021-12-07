@@ -35,9 +35,9 @@ for iRot = 1:2
         % project in both cameras
         P_C2 = [R_C2_C1_test T_C2_C1_test] * P_C1;
         
-        num_points_in_front1 = sum(P_C1(3,:) > 0);
-        num_points_in_front2 = sum(P_C2(3,:) > 0);
-        total_points_in_front = num_points_in_front1 + num_points_in_front2;
+        points_in_front1 = P_C1(3,:) > 0;
+        points_in_front2 = P_C2(3,:) > 0;
+        total_points_in_front = sum(points_in_front1 & points_in_front2);
               
         if (total_points_in_front > total_points_in_front_best)
             % Keep the rotation that gives the highest number of points
