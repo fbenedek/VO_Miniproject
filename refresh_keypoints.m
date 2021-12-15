@@ -21,19 +21,19 @@ for i = 1:M
     Fw_i(:,i) = R_Tau_i*[F_i(i); 1];
 end
 
-cos_angle = sum(Cw_i.*Fw_i)./(vecnorm(Cw_i).*vecnorm(Fw_i)); %cosine of angles using inner product, 1*M
-bearing_angles = acos(cos_angle); %angles, 1*M
+cos_angles = sum(Cw_i.*Fw_i)./(vecnorm(Cw_i).*vecnorm(Fw_i)); %cosine of angles using inner product, 1*M
+bearing_angles = acos(cos_angles); %angles, 1*M
 
 % select the indices which we will triangulate
-triangluation_indices = bearing_angles > params.min_bearing_angle;
+triangulation_indices = bearing_angles > params.min_bearing_angle;
 % triangulate points and get the new X_i, P_i values
-X_new = triangulate_points(C_i, F_i, Tau_i, Twc_i, triangluation_indices);
-X_i = [X_i X_new];
-P_i = [P_i, C_i(:,triangluation_indices)];
+X_new = triangulate_points(C_i, F_i, Tau_i, Twc_i, triangulation_indices);
+X_i = [X_i, X_new];
+P_i = [P_i, C_i(:,triangulation_indices)];
 % discard the added points from C_i, F_i, Tau_i
-C_i = C_i(:, ~triangluation_indices);
-F_i = F_i(:, ~triangluation_indices);
-Tau_i = Tau_i(:, ~triangluation_indices);
+C_i = C_i(:, ~triangulation_indices);
+F_i = F_i(:, ~triangulation_indices);
+Tau_i = Tau_i(:, ~triangulation_indices);
 
 % set fields of the output S_i
 S_i.P_i = P_i;
