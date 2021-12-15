@@ -1,4 +1,4 @@
-function S_i = get_new_canditates(image, S_i, Twc_i, params)
+function S_i = get_new_canditates(image, S_i, params)
 % GET_NEW_CANDIDATES returns a new state that contains a C_i to which new
 % candidate points are added
 
@@ -18,11 +18,7 @@ harris_corners = detectHarrisFeatures(image, 'MinQuality',params.harris_min_qual
 % proposals
 proposed_points = filter_harris_corners(harris_corners, C_i, P_i, params);
 
-curr_Tau = [Twc_i(1:3,1); Twc_i(1:3,2); Twc_i(1:3,3); Twc_i(1:3,4)];
-%1*12 vectorized current Twc_i
-
-proposed_Tau = repmat(curr_Tau, 1, size(proposed_points,2));
-%repmat of curr_Tau (as all new points have the same Tau)
+proposed_Tau = repmat(curr_Tau,1,size(proposed_points,2));
 
 % output the refreshed points
 S_i.P_i = P_i;
