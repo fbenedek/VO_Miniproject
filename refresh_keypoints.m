@@ -21,7 +21,7 @@ for i = 1:M
     Fw_i(:,i) = R_Tau_i*[F_i(i); 1];
 end
 
-cos_angle = sum(Cw_i.*Fw_i)/(vecnorm(Cw_i).*vecnorm(Fw_i)); %cosine of angles using inner product, 1*M
+cos_angle = sum(Cw_i.*Fw_i)./(vecnorm(Cw_i).*vecnorm(Fw_i)); %cosine of angles using inner product, 1*M
 bearing_angles = acos(cos_angle); %angles, 1*M
 
 % select the indices which we will triangulate
