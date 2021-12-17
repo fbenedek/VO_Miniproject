@@ -1,4 +1,24 @@
 function [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img, state, T_WC)
+% PLOTSTATE generates the plot as requested in project statement. 
+% inputs:
+%   fig: The figure containing the plot
+%   t_WC_hist: A list containing the trajectory of translations. The
+%   function adds the current translation based on T_WC and outputs the
+%   updated trajectory for use in next iteration. At first call just pass
+%   an empty list.
+%   n_landmark_hist: List of the number of tracked landmarks through time.
+%   The function outputs the updated list to use in next iteration. At
+%   first iteration just pass an empty list.
+%   img: the current image
+%   state: the current state, S
+%   T_WC: the current camera pose
+%
+% outputs:
+%   t_WC_hist: Updated list containing the trajectory of translations.
+%   n_landmark_hist: Updated List of the number of tracked landmarks 
+%   through time.
+
+
 figure(fig);
 hist_length = 20;
 
@@ -31,8 +51,13 @@ title("Trajectory of last " + hist_length + " frames and current landmarks");
 hold off;
 
 subplot(2,4,5);
-plot((-size(n_landmark_hist,2)+1):0, n_landmark_hist, 'bo');
+if size(n_landmark_hist,2) < hist_length
+    plot((-size(n_landmark_hist,2)+1):0, n_landmark_hist);
+else
+    plot((-hist_length+1):0, n_landmark_hist(end-hist_length+1:end));
+end
 title("# of tracked landmarks for last " + hist_length + " frames");
+
 if size(n_landmark_hist,2) > 1
     xlim([-size(n_landmark_hist,2)+1,0])
 end

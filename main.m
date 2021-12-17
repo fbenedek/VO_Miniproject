@@ -92,7 +92,9 @@ addpath('functions/');
 fig = figure;
 t_WC_hist = [];
 n_landmark_hist = [];
-plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC);
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC);
+% just for testing purposes
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC+2);
 
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;
