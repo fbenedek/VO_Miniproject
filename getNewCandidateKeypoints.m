@@ -18,17 +18,17 @@ lambda = 10;
 % find harris corners
 points = detectHarrisFeatures(img, 'MinQuality', 0.1);
 
-tic;
+%tic;
 points = nonMaxSupression(points, 10);
-toc
+%toc
 
 % find the smallest distance to existing points
 D = pdist2(P_i', points.Location, 'cityblock', 'Smallest', 1);
 distinct_points = D > lambda;
 
-figure;
-imshow(img); hold on;
-plot(points(distinct_points,:));
+% figure;
+% imshow(img); hold on;
+% plot(points(distinct_points,:));
 
 c = points.Location(distinct_points,:)';
 end

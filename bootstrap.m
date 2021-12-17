@@ -44,7 +44,11 @@ M1 = K * eye(3,4);
 M2 = K * [R_CW, T_CW];
 
 X_0 = linearTriangulation(kp0', kp1', M1, M2);
+depth_median = median(X_0(3,:));
+depth_mask = (X_0(3,:) < 10*depth_median) & (X_0(3,:) > 0); % probably not a great way to do this
+X_0 = X_0(:, depth_mask);
 P_0 = kp1(:,1:2)';
+P_0 = P_0(:, depth_mask);
 R_WC = R_CW';
 t_WC = -R_WC*T_CW;
 T_WC = [R_WC, t_WC];

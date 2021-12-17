@@ -12,7 +12,7 @@ if ds == 0
         0 7.188560000000e+02 1.852157000000e+02
         0 0 1];
 elseif ds == 1
-    % Path containing the many files of Malaga 7.
+    % Path containing the many fi5374965328684e+03les of Malaga 7.
     malaga_path = 'data/malaga-urban-dataset-extract-07/';
     assert(exist('malaga_path', 'var') ~= 0);
     images = dir([malaga_path ...
@@ -88,6 +88,11 @@ addpath('functions/');
 % Tau_i is a 12*M matrix containing the concatenated and vectorized
 % transformations from world frame to the camera frame of the first
 % observation of each candidate keypoint.
+
+fig = figure;
+t_WC_hist = [];
+n_landmark_hist = [];
+plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC);
 
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;
