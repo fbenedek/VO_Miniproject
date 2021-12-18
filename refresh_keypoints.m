@@ -1,4 +1,4 @@
-function S_i = refresh_keypoints(S_i, Twc_i, params)
+function S_i = refresh_keypoints(S_i, Twc_i, K, params)
 % REFRESH_KEYPOINTS adds keypoints to P_i, X_i from C_i if their calculated
 % bearing angle exceeds params.min_bearing_angle.
 
@@ -27,7 +27,8 @@ bearing_angles = acos(cos_angles); %angles, 1*M
 % select the indices which we will triangulate
 triangulation_indices = bearing_angles > params.min_bearing_angle;
 % triangulate points and get the new X_i, P_i values
-X_new = triangulate_points(C_i, F_i, Tau_i, Twc_i, triangulation_indices);
+X_new = triangulate_new_landmarks(C_i(:,triangulation_indices),...
+    F_i(:,triangulation_indices), Tau_i(:,triangulation_indices), Twc_i, K);
 X_i = [X_i, X_new];
 P_i = [P_i, C_i(:,triangulation_indices)];
 % discard the added points from C_i, F_i, Tau_i
