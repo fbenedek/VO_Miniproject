@@ -1,4 +1,4 @@
-function S_i, Twc_i = process_frame(image, prev_image, S_i, params)
+function [S_i, Tcw_i] = process_frame(image, prev_image, S_i, params)
 % PROCESS_FRAME iterates the VO pipeline by processing a new frame.
 % Arguments:
 % Current and previous images (image, prev_image)
@@ -19,13 +19,13 @@ function S_i, Twc_i = process_frame(image, prev_image, S_i, params)
 % (can also be vectorized)
 % params, a struct that contains the parameters
 % Returns:
-% Twc_i, a 4*4 matrix containing the current pose
+% Tcw_i, a 4*4 matrix containing the current pose
 % (can also be vectorized)
 % S_i, the current state
 
 % 4.1 and 4.2: Track keypoints + candidates and get camera pose and filtered keypoints
 % from p3p ransac
-Twc_i, S_i = track_and_get_pose(image, S_i, params);
+[Tcw_i, S_i] = track_and_get_pose(image, S_i, params);
 
 % 4.3 triangulate and add new points if possible
 % triangulate the points that have a sufficient bearing angle and add them
