@@ -7,8 +7,7 @@ function [Tcw_i] = get_pose(P_i, X_i, params)
 % utilize the given p3p function with modifications
 
 % Get pose
-[R_C_W, t_C_W, ~, ~, ~] = ransacLocalization(P_i, ...
-    X_i, params.K);
+[R_C_W, t_C_W, ~, ~, ~] = ransacLocalization(P_i, X_i, params);
 % Convert to our fromat
 Tcw_i = [R_C_W t_C_W; 0 0 0 1];
 end

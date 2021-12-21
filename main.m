@@ -1,4 +1,6 @@
 %% Setup
+% read parameters from params.xml
+params = readstruct("params.xml","FileType","xml");
 ds = 2; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
@@ -95,7 +97,7 @@ for i = range
         assert(false);
     end
     % TODO implement Markovian forward iteration
-    % S_i, Twc_i = process_frame(image, prev_image, S_i), where:
+    % [S_i, Twc_i] = process_frame(image, S_i, params), where:
     % Twc_i is 4*4 matrix containing the current pose
     % (can also be vectorized)
     % S_i is a struct with the following fields:

@@ -1,4 +1,4 @@
-function [Twc_i, S_i] = track_and_get_pose(image, prev_image, S_i, params)
+function [Twc_i, S_i] = track_and_get_pose(image, S_i, params)
 % TRACK_AND_GET_POSE track the keypoints and candidates P_i, C_i with KLT
 % trackers KLT_Point_Tracker and KLT_Candidate_Tracker
 % gets the camera pose Twc_i with a p3p (adaptive) ransac
