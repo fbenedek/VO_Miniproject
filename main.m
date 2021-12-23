@@ -1,4 +1,6 @@
 %% Setup
+params = readstruct("params.xml","FileType","xml");
+
 ds = 0; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
@@ -66,14 +68,14 @@ addpath('functions/');
 % visualizeLandmarks(img1, kpt, ldm);
 
 % having img1, img2 we will run our triangulation here
-[P_0, X_0, T_WC] = bootstrap(img0, img1, K);
+[P_0, X_0, T_WC] = bootstrap(img0, img1, K, params);
 % img0, img1 are the images returned by the bootstrap_frames indexes
 % P_0 is a 2*K matrix containing the 2D positions of the keypoints on img0,
 % this will be the frame of the origin.
 % X_0 is a 3*K matrix containing the 3D positions of the keypoints
 
 % TODO init state of the estimation:
-[S, T_WC] = init_state(P_0, X_0, T_WC, img1);
+[S, T_WC] = init_state(P_0, X_0, T_WC, img1, params);
 % P_0 is a 2*K matrix containing the 2D positions of the keypoints on img0
 % X_0 is a 3*K matrix containing the 3D positions of the keypoints
 % Twc_i is 4*4 matrix containing the current pose, now the pose of the
@@ -92,9 +94,9 @@ addpath('functions/');
 fig = figure;
 t_WC_hist = [];
 n_landmark_hist = [];
-[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC);
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC, params);
 % just for testing purposes
-[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC+2);
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC+2, params);
 
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;

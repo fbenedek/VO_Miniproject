@@ -1,4 +1,4 @@
-function [S, T_WC] = init_state(P_0, X_0, T_WC, img)
+function [S, T_WC] = init_state(P_0, X_0, T_WC, img, params)
 %INIT_STATE initialises the state struct. 
 %   
 % input:
@@ -24,7 +24,7 @@ function [S, T_WC] = init_state(P_0, X_0, T_WC, img)
 
 
 % find keypoint candidates
-c = getNewCandidateKeypoints(img,P_0);
+c = getNewCandidateKeypoints(img,P_0, params);
 
 S.P = P_0;
 S.X = X_0;

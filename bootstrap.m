@@ -1,4 +1,4 @@
-function [P_0, X_0, T_WC] = bootstrap(img0, img1, K)
+function [P_0, X_0, T_WC] = bootstrap(img0, img1, K, params)
 % BOOTSTRAP return keypoints and landmarks for initialisation as well as
 % camera frame transformation computed in the process.
 %
@@ -12,22 +12,27 @@ function [P_0, X_0, T_WC] = bootstrap(img0, img1, K)
 %   camera frame from img0 is considered as the world frame
 %   T_WC, transformation from world frame (img0) to camera frame from img1
 
+match_threshold = params.initial_match_threshold;
+ransac_trials = params.initial_ransac_trials;
+depth_threshold_multiplier = params.initial_depth_threshold_multiplier;
+min_harris_quality = params.min_harris_feature_quality;
+
 % Detect Harris corners
-points0 = detectHarrisFeatures(img0, 'MinQuality', 0.01);
-points1 = detectHarrisFeatures(img1, 'MinQuality', 0.01);
+points0 = detectHarrisFeatures(img0, 'MinQuality', min_harris_quality);
+points1 = detectHarrisFeatures(img1, 'MinQuality', min_harris_quality);
 
 % Extract features around Harris corners
 [features0,valid_points0] = extractFeatures(img0,points0);
 [features1,valid_points1] = extractFeatures(img1,points1);
 
 % Match features
-indexPairs = matchFeatures(features0,features1,'Unique', 1,'MatchThreshold',15);
+indexPairs = matchFeatures(features0,features1,'Unique', 1,'MatchThreshold',match_threshold);
 matchedPoints0 = valid_points0(indexPairs(:,1),:);
 matchedPoints1 = valid_points1(indexPairs(:,2),:);
 
 % Estimate F
 [F, inlier_idx] = estimateFundamentalMatrix(matchedPoints0,...
-                    matchedPoints1,'Method','RANSAC','NumTrials', 2000);
+                    matchedPoints1,'Method','RANSAC','NumTrials', ransac_trials);
 
 % Get E from F
 E = K'*F*K;
@@ -45,7 +50,7 @@ M2 = K * [R_CW, T_CW];
 
 X_0 = linearTriangulation(kp0', kp1', M1, M2);
 depth_median = median(X_0(3,:));
-depth_mask = (X_0(3,:) < 10*depth_median) & (X_0(3,:) > 0); % probably not a great way to do this
+depth_mask = (X_0(3,:) < depth_threshold_multiplier*depth_median) & (X_0(3,:) > 0); % probably not a great way to do this
 X_0 = X_0(:, depth_mask);
 P_0 = kp1(:,1:2)';
 P_0 = P_0(:, depth_mask);

@@ -1,4 +1,4 @@
-function [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img, state, T_WC)
+function [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img, state, T_WC, params)
 % PLOTSTATE generates the plot as requested in project statement. 
 % inputs:
 %   fig: The figure containing the plot
@@ -20,7 +20,7 @@ function [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_his
 
 
 figure(fig);
-hist_length = 20;
+hist_length = params.plot_history_length;
 
 assert(size(t_WC_hist,2)==size(n_landmark_hist,2),'History length mismatch')
 t_WC = T_WC(1:3,4);
