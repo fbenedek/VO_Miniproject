@@ -36,5 +36,3 @@ for i = 1:m
 end
 
 X_new = X_new_homog(1:3,:);
-
-
