@@ -26,8 +26,6 @@ max_num_inliers_history = [];
 num_iteration_history = [];
 avg_error_history = [];
 max_num_inliers = 0;
-% Replace the following with the path to your camera projection code:
-% addpath('../../01_camera_projection/code');
 
 % RANSAC
 i = 1;
@@ -67,7 +65,6 @@ while num_iterations > i
     errors = sum(difference.^2, 1);
     avg_error_history = [avg_error_history mean(abs(errors))];
     is_inlier = errors < pixel_tolerance^2;
-    
     % Consider inliers for the alternative solutions.
     
     for alt_idx=1:3
@@ -110,8 +107,8 @@ while num_iterations > i
 end
 
 if max_num_inliers == 0
-    R_C_W = [];
-    t_C_W = [];
+    R_C_W = eye(3);
+    t_C_W = zeros(3,1);
 else
     M_C_W = estimatePoseDLT(...
         matched_query_keypoints(:, best_inlier_mask>0)', ...

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <struct>
     <use_adaptive_ransac>true</use_adaptive_ransac>
-    <ransac_min_inlier_count>30</ransac_min_inlier_count>
+    <ransac_min_inlier_count>10</ransac_min_inlier_count>
     <ransac_pixel_tolerance>10</ransac_pixel_tolerance>
     <ransac_num_iters>3000</ransac_num_iters>
     <ransac_k>3</ransac_k>
