@@ -1,4 +1,4 @@
-function [S_i, Twc_i] = process_frame(image, S_i, params)
+function [S_i, Twc_i] = process_frame(image, S_i, K, params)
 % PROCESS_FRAME iterates the VO pipeline by processing a new frame.
 % Arguments:
 % Current and previous images (image, prev_image)
@@ -30,10 +30,10 @@ function [S_i, Twc_i] = process_frame(image, S_i, params)
 % 4.3 triangulate and add new points if possible
 % triangulate the points that have a sufficient bearing angle and add them
 % to the keypoints
-S_i = refresh_keypoints(S_i, Twc_i, params);
+S_i = refresh_keypoints(S_i, Twc_i, K, params);
 % get new possible keypoints - the Harris corners that do not coincide with
 % the current C_i or P_i
-S_i = get_new_canditates(image, S_i, params);
+S_i = get_new_canditates(image, S_i, Twc_i, params);
 
 
 end

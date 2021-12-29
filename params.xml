@@ -18,4 +18,8 @@
     <non_max_suppression_radius>10</non_max_suppression_radius>
     <candidate_dist_threshold>10</candidate_dist_threshold>
     <plot_history_length>20</plot_history_length>
+    <min_new_point_distance>10</min_new_point_distance>
+    <min_bearing_angle>0.785</min_bearing_angle>
+    <harris_min_quality>0.01</harris_min_quality>
+    <harris_gaussian_dim>5</harris_gaussian_dim>
 </struct>
