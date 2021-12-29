@@ -1,8 +1,8 @@
-%% Setup
+  %% Setup
 % read parameters from params.xml
 params = readstruct("params.xml","FileType","xml");
 
-ds = 0; % 0: KITTI, 1: Malaga, 2: parking
+ds = 2; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -92,14 +92,14 @@ addpath('functions/');
 % visualizeLandmarks(img1, kpt, ldm);
 
 % having img1, img2 we will run our triangulation here
-[P_0, X_0, T_WC] = bootstrap(img0, img1, K, params);
+[P_0, X_0, Twc_i] = bootstrap(img0, img1, K, params);
 % img0, img1 are the images returned by the bootstrap_frames indexes
 % P_0 is a 2*K matrix containing the 2D positions of the keypoints on img0,
 % this will be the frame of the origin.
 % X_0 is a 3*K matrix containing the 3D positions of the keypoints
 
 % TODO init state of the estimation:
-[S, T_WC] = init_state(P_0, X_0, T_WC, img1, params);
+[S_i, Twc_i] = init_state(P_0, X_0, Twc_i, img1, params);
 % P_0 is a 2*K matrix containing the 2D positions of the keypoints on img0
 % X_0 is a 3*K matrix containing the 3D positions of the keypoints
 % Twc_i is 4*4 matrix containing the current pose, now the pose of the
@@ -118,10 +118,11 @@ addpath('functions/');
 fig = figure;
 t_WC_hist = [];
 n_landmark_hist = [];
-[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC, params);
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S_i, Twc_i, params);
 % just for testing purposes
-[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S, T_WC+2, params);
-
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S_i, Twc_i+2, params);
+% init image size
+params.image_size = size(img0);
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;
 for i = range
@@ -138,8 +139,8 @@ for i = range
     else
         assert(false);
     end
-    % TODO implement Markovian forward iteration
-    % [S_i, Twc_i] = process_frame(image, S_i, params), where:
+    % Markovian forward iteration
+    [S_i, Twc_i] = process_frame(image, S_i, K, params);
     % Twc_i is 4*4 matrix containing the current pose
     % (can also be vectorized)
     % S_i is a struct with the following fields:
@@ -154,10 +155,9 @@ for i = range
     % transformations from the first observation of each keypoint candidate to
     % the current frame.
     
-    % D_i = plot_state(S_i, image)
-
+    [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, image, S_i, Twc_i, params);
     % Makes sure that plots refresh.    
-    % TODO: Plot results
+    % Plot results
     % Plot the following:
     % Current image displaying tracked keypoints (P_i) and keypoint
     % candidates (C_i)

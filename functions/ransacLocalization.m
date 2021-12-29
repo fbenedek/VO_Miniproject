@@ -1,16 +1,14 @@
 function [R_C_W, t_C_W, best_inlier_mask, max_num_inliers_history, num_iteration_history] ...
-    = ransacLocalization(matched_query_keypoints, corresponding_landmarks, params)
+    = ransacLocalization(matched_query_keypoints, corresponding_landmarks, K, params)
 % query_keypoints should be 2x1000
 % all_matches should be 1x1000 and correspond to the output from the
 %   matchDescriptors() function from exercise 3.
 % best_inlier_mask should be 1xnum_matched (!!!) and contain, only for the
 %   matched keypoints (!!!), 0 if the match is an outlier, 1 otherwise.
 
-% Read parameters
-K = params.K;
 num_iterations = params.ransac_num_iters; % number of iterations when not
 % using adaptive ransac
-adaptive = params.use_adaptive_ransac; % whether or not to use ransac adaptively
+adaptive = strcmp(params.use_adaptive_ransac,'true'); % whether or not to use ransac adaptively
 min_inlier_count = params.ransac_min_inlier_count;
 pixel_tolerance = params.ransac_pixel_tolerance;
 k = params.ransac_k; % number of pts needed for a model, 3 by default
@@ -26,6 +24,7 @@ best_inlier_mask = zeros(1, size(matched_query_keypoints, 2));
 matched_query_keypoints = flipud(matched_query_keypoints);
 max_num_inliers_history = [];
 num_iteration_history = [];
+avg_error_history = [];
 max_num_inliers = 0;
 % Replace the following with the path to your camera projection code:
 % addpath('../../01_camera_projection/code');
@@ -66,6 +65,7 @@ while num_iterations > i
         [1 size(corresponding_landmarks, 2)]), K);
     difference = matched_query_keypoints - projected_points;
     errors = sum(difference.^2, 1);
+    avg_error_history = [avg_error_history mean(abs(errors))];
     is_inlier = errors < pixel_tolerance^2;
     
     % Consider inliers for the alternative solutions.

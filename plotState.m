@@ -26,20 +26,20 @@ assert(size(t_WC_hist,2)==size(n_landmark_hist,2),'History length mismatch')
 t_WC = T_WC(1:3,4);
 
 t_WC_hist = [t_WC_hist, t_WC];
-n_landmark_hist = [n_landmark_hist, size(state.X,2)];
+n_landmark_hist = [n_landmark_hist, size(state.X_i,2)];
 
 %plot current image, keypoints and keypoint candidates.
 subplot(2,4,[1,2]);
 imshow(img); hold on;
-plot(state.P(1,:), state.P(2,:),'g+', 'MarkerSize', 6, 'LineWidth', 2);
-plot(state.C(1,:), state.C(2,:),'r+', 'MarkerSize', 6, 'LineWidth', 2);
+plot(state.P_i(1,:), state.P_i(2,:),'g+', 'MarkerSize', 6, 'LineWidth', 2);
+plot(state.C_i(1,:), state.C_i(2,:),'r+', 'MarkerSize', 6, 'LineWidth', 2);
 hold off;
 title('Current image')
 legend('Current keypoints', 'Candidate keypoints',  'Location','southeast');
 
 % plot trajectoy and current landmarks
 subplot(2,4,[3,4,7,8]);
-plot(state.X(1,:),state.X(3,:),'g.')
+plot(state.X_i(1,:),state.X_i(3,:),'g.')
 hold on;
 if size(t_WC_hist,2) < hist_length  
     plot(t_WC_hist(1,:), t_WC_hist(3,:), 'bo');

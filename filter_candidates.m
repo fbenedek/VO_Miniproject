@@ -6,7 +6,7 @@ function [C_i, F_i, Tau_i] = filter_candidates(C_i, F_i, Tau_i, candidate_scores
 % script!
 % The points that we fail to track are discarded from C_i, F_i and Tau_i
 % Test if points are in image
-candidates_in_image = all([C_i > 0; C_i < params.image_size],1);
+candidates_in_image = all([C_i > 0; C_i < params.image_size'],1);
 candidate_valid_score = candidate_scores' > params.candidate_score_thresh;
 candidate_validity = all([candidate_valid_score; candidates_in_image],1);
 % apply indices

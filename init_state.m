@@ -26,11 +26,16 @@ function [S, T_WC] = init_state(P_0, X_0, T_WC, img, params)
 % find keypoint candidates
 c = getNewCandidateKeypoints(img,P_0, params);
 
-S.P = P_0;
-S.X = X_0;
-S.C = c;
-S.F = c;
+S.P_i = P_0;
+S.X_i  = X_0;
+S.C_i  = c;
+S.F_i  = c;
 T_WC_vec = T_WC(:);
-S.Tau = repmat(T_WC_vec, 1, size(c,2));
+S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
+% init trackers
+S.KLT_Point_Tracker = vision.PointTracker();
+S.KLT_Candidate_Tracker = vision.PointTracker();
+initialize(S.KLT_Point_Tracker, S.P_i', img);
+initialize(S.KLT_Candidate_Tracker, S.C_i', img)
 end
 

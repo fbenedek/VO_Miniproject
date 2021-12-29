@@ -25,7 +25,7 @@ function [S_i, Twc_i] = process_frame(image, S_i, K, params)
 
 % 4.1 and 4.2: Track keypoints + candidates and get camera pose and filtered keypoints
 % from p3p ransac
-[Twc_i, S_i] = track_and_get_pose(image, S_i, params);
+[Twc_i, S_i] = track_and_get_pose(image, S_i, K, params);
 
 % 4.3 triangulate and add new points if possible
 % triangulate the points that have a sufficient bearing angle and add them
