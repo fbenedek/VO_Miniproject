@@ -18,7 +18,7 @@ Cw_i = Rwc_i*[C_i; ones(1,M)]; %current keypoint vectors in world frame, 3*M
 Fw_i = zeros(3,M); %first appearance keypoint vectors in world frame, 3*M
 for i = 1:M
     R_Tau_i = [Tau_i(1:3,i), Tau_i(4:6,i), Tau_i(7:9,i)]; %first appearance rotation matrix, 3*3
-    Fw_i(:,i) = R_Tau_i*[F_i(i); 1];
+    Fw_i(:,i) = R_Tau_i*[F_i(:,i); 1];
 end
 
 cos_angles = sum(Cw_i.*Fw_i)./(vecnorm(Cw_i).*vecnorm(Fw_i)); %cosine of angles using inner product, 1*M
