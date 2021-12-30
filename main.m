@@ -34,6 +34,30 @@ elseif ds == 2
      
     ground_truth = load([parking_path '/poses.txt']);
     ground_truth = ground_truth(:, [end-8 end]);
+elseif ds == 3
+    % Path containing images and calibration data for GH dataset 1
+    % Greenhouse dataset 1 - Machinery
+    % Filtering and downsampling might be needed!
+    greenhouse_1_path = 'data/greenhouse/01_machinery/';
+    assert(exist('greenhouse_1_path', 'var') ~= 0);
+    last_frame = 598;
+    K = readxlsx([greenhouse_1_path '/cam_intrinsics.xlsx']);
+elseif ds == 4
+    % Path containing images and calibration data for GH dataset 1
+    % Greenhouse dataset 2 - Long walk
+    % Filtering and downsampling might be needed!
+    greenhouse_2_path = 'data/greenhouse/02_long_walk/';
+    assert(exist('greenhouse_2_path', 'var') ~= 0);
+    last_frame = 4060;
+    K = readxlsx([greenhouse_2_path '/cam_intrinsics.xlsx']);
+elseif ds == 5
+    % Path containing images and calibration data for GH dataset 1
+    % Greenhouse dataset 3 - Short row
+    % Filtering and downsampling might be needed!
+    greenhouse_3_path = 'data/greenhouse/03_short_row/';
+    assert(exist('greenhouse_3_path', 'var') ~= 0);
+    last_frame = 598;
+    K = readxlsx([greenhouse_3_path '/cam_intrinsics.xlsx']);
 else
     assert(false);
 end
@@ -58,6 +82,22 @@ elseif ds == 2
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([parking_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
+elseif ds == 3
+    img0 = rgb2gray(imread([greenhouse_1_path ...
+        sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
+    img1 = rgb2gray(imread([greenhouse_1_path ...
+        sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
+elseif ds == 4
+    img0 = rgb2gray(imread([greenhouse_2_path ...
+        sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
+    img1 = rgb2gray(imread([greenhouse_2_path ...
+        sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
+elseif ds == 5
+    img0 = rgb2gray(imread([greenhouse_3_path ...
+        sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
+    img1 = rgb2gray(imread([greenhouse_3_path ...
+        sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
+
 else
     assert(false);
 end
@@ -135,6 +175,15 @@ for i = range
             left_images(i).name]));
     elseif ds == 2
         image = im2uint8(rgb2gray(imread([parking_path ...
+            sprintf('/images/img_%05d.png',i)])));
+    elseif ds == 3
+        image = im2uint8(rgb2gray(imread([greenhouse_1_path ...
+            sprintf('/images/img_%05d.png',i)])));
+    elseif ds == 4
+        image = im2uint8(rgb2gray(imread([greenhouse_2_path ...
+            sprintf('/images/img_%05d.png',i)])));
+    elseif ds == 5
+        image = im2uint8(rgb2gray(imread([greenhouse_3_path ...
             sprintf('/images/img_%05d.png',i)])));
     else
         assert(false);
