@@ -35,4 +35,5 @@ for i = 1:m
         % M2 changes
 end
 
-X_new = X_new_homog(1:3,:);
+%X_new = X_new_homog(1:3,:);
+X_new = X_new_homog;
