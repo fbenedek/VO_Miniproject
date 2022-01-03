@@ -33,7 +33,7 @@ function [S_i, Twc_i] = process_frame(image, S_i, K, params)
 S_i = refresh_keypoints(S_i, Twc_i, K, params);
 % get new possible keypoints - the Harris corners that do not coincide with
 % the current C_i or P_i
-S_i = get_new_canditates(image, S_i, Twc_i, params);
+% S_i = get_new_canditates(image, S_i, Twc_i, params);
 
 
 end

@@ -24,6 +24,15 @@ img1 = histeq(img1);
 points0 = detectHarrisFeatures(img0, 'MinQuality', min_harris_quality);
 points1 = detectHarrisFeatures(img1, 'MinQuality', min_harris_quality);
 
+points0 = detectORBFeatures(img0);
+points1 = detectORBFeatures(img1);
+
+points0 = detectFASTFeatures(img0);
+points1 = detectFASTFeatures(img1);
+
+% points0 = detectBRISKFeatures(img0);
+% points1 = detectBRISKFeatures(img1);
+
 
 % Extract features around Harris corners
 [features0,valid_points0] = extractFeatures(img0,points0);
@@ -34,8 +43,8 @@ indexPairs = matchFeatures(features0,features1,'Unique', 1,'MatchThreshold',matc
 matchedPoints0 = valid_points0(indexPairs(:,1),:);
 matchedPoints1 = valid_points1(indexPairs(:,2),:);
 
-% imshow(img1); hold on;
-% plot(matchedPoints1);
+imshow(img1); hold on;
+plot(matchedPoints1);
 
 % Estimate F
 [F, inlier_idx] = estimateFundamentalMatrix(matchedPoints0,...
