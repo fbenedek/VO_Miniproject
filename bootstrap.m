@@ -17,9 +17,13 @@ ransac_trials = params.initial_ransac_trials;
 depth_threshold_multiplier = params.initial_depth_threshold_multiplier;
 min_harris_quality = params.min_harris_feature_quality;
 
+img0 = histeq(img0);
+img1 = histeq(img1);
+
 % Detect Harris corners
 points0 = detectHarrisFeatures(img0, 'MinQuality', min_harris_quality);
 points1 = detectHarrisFeatures(img1, 'MinQuality', min_harris_quality);
+
 
 % Extract features around Harris corners
 [features0,valid_points0] = extractFeatures(img0,points0);
@@ -29,6 +33,9 @@ points1 = detectHarrisFeatures(img1, 'MinQuality', min_harris_quality);
 indexPairs = matchFeatures(features0,features1,'Unique', 1,'MatchThreshold',match_threshold);
 matchedPoints0 = valid_points0(indexPairs(:,1),:);
 matchedPoints1 = valid_points1(indexPairs(:,2),:);
+
+% imshow(img1); hold on;
+% plot(matchedPoints1);
 
 % Estimate F
 [F, inlier_idx] = estimateFundamentalMatrix(matchedPoints0,...

@@ -20,7 +20,7 @@ dist_type = params.proposal_test_norm;
 lambda = params.candidate_dist_threshold;
 
 % find harris corners
-points = detectHarrisFeatures(img, 'MinQuality', min_harris_quality);
+points = detectHarrisFeatures(histeq(img), 'MinQuality', min_harris_quality);
 
 %tic;
 points = nonMaxSupression(points, non_max_suppression_radius);

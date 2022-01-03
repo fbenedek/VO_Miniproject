@@ -35,7 +35,13 @@ C_i = C_i';
 
 
 % do RANSAC p3p and get pose
-Twc_i = get_pose(P_i, X_i(1:3,:), K, params);
+% NOTE, get_pose seemingly outputs Tcw, not Twc.
+Tcw_i = get_pose(P_i, X_i(1:3,:), K, params);
+Rcw = Tcw_i(1:3,1:3);
+t_cw = Tcw_i(1:3,end);
+Rwc = Rcw';
+t_wc = -Rwc*t_cw;
+Twc_i = [Rwc, t_wc; 0 0 0 1];
 
 % set the output dict
 S_i.P_i = P_i;
