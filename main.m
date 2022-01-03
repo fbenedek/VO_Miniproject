@@ -159,8 +159,6 @@ fig = figure;
 t_WC_hist = [];
 n_landmark_hist = [];
 [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S_i, Twc_i, params);
-% just for testing purposes
-[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S_i, Twc_i+2, params);
 % init image size
 params.image_size = size(img0);
 %% Continuous operation
