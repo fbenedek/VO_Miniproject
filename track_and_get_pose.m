@@ -36,7 +36,10 @@ C_i = C_i';
 
 % do RANSAC p3p and get pose
 % NOTE, get_pose seemingly outputs Tcw, not Twc.
-Tcw_i = get_pose(P_i, X_i(1:3,:), K, params);
+[Tcw_i, P_i, X_i] = get_pose(P_i, X_i(1:3,:), K, params);
+% keep ones for X_i
+% TODO check if the matlab version still returns Tcw
+X_i = [X_i; ones(1,length(X_i))];
 Rcw = Tcw_i(1:3,1:3);
 t_cw = Tcw_i(1:3,end);
 Rwc = Rcw';

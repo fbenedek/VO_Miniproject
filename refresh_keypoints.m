@@ -34,10 +34,20 @@ X_new = triangulate_new_landmarks(C_i(:,triangulation_indices),...
 X_i = [X_i, X_new];
 P_i = [P_i, C_i(:,triangulation_indices)];
 % discard the added points from C_i, F_i, Tau_i
+% Calculate the backprojection error for debug purposes
+projection_matrix = K * Twc_i(1:3,:);
+projected_points = projection_matrix * X_i;
+projected_points = projected_points./projected_points (3,:);
+reprojection_errors = projected_points(1:2,:) - P_i;
+avg_repro_err = mean(vecnorm(reprojection_errors,1));
+fprintf("Average reprojection error is %f\n", avg_repro_err)
+%reprojected_points - get them from cam matrix and current position!
+% calculate previous and newly added repro error.
 C_i = C_i(:, ~triangulation_indices);
 F_i = F_i(:, ~triangulation_indices);
 Tau_i = Tau_i(:, ~triangulation_indices);
 
+fprintf("Added %i new keypoints!\n", sum(triangulation_indices));
 % set fields of the output S_i
 S_i.P_i = P_i;
 S_i.X_i = X_i;
