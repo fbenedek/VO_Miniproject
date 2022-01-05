@@ -1,4 +1,4 @@
-  %% Setup
+%% Setup
 % read parameters from params.xml
 params = readstruct("params.xml","FileType","xml");
 
@@ -125,7 +125,7 @@ end
 % transformations from the first observation of each keypoint candidate to
 % the current frame. Now contains M identity transformations only.
 
-
+    
 addpath('functions/');
 % patch_r = 4;
 % [kpt, ldm] = init_VO(img0, img1, K, patch_r);
@@ -187,7 +187,7 @@ for i = range
         assert(false);
     end
     % Markovian forward iteration
-    [S_i, Twc_i] = process_frame(image, S_i, K, params);
+    [S_i, Twc_i] = process_frame(image, S_i, Twc_i, K, params);
     % Twc_i is 4*4 matrix containing the current pose
     % (can also be vectorized)
     % S_i is a struct with the following fields:
@@ -201,7 +201,6 @@ for i = range
     % Tau_i is a 12*M matrix containing the concatenated and vectorized
     % transformations from the first observation of each keypoint candidate to
     % the current frame.
-    
     [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, image, S_i, Twc_i, params);
     % Makes sure that plots refresh.    
     % Plot results

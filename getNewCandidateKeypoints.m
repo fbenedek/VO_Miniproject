@@ -12,7 +12,7 @@ function c = getNewCandidateKeypoints(img,P_i, params)
 %   NOTE: Currently we simply distinguish keypoints based on the manhattan
 %   distance in the image. Other heuristics may be better.
 
-min_harris_quality = params.min_harris_feature_quality;
+min_harris_quality = params.min_harris_quality_online;
 non_max_suppression_radius = params.non_max_suppression_radius;
 dist_type = params.proposal_test_norm;
 

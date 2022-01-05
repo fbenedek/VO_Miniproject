@@ -11,12 +11,12 @@ F_i = S_i.F_i;
 Tau_i = S_i.Tau_i;
 
 % get Harris corners, parametrized by params
-harris_corners = detectHarrisFeatures(image, 'MinQuality',params.harris_min_quality,...
+harris_corners = detectHarrisFeatures(image, 'MinQuality',params.min_harris_quality_online,...
     'FilterSize',params.harris_gaussian_dim);
 % filter harris corners based on the distance from the current C_i and P_i,
 % then adapt Mads' non-maximum surpression to arrive to the final list of
 % proposals
-proposed_points = filter_harris_corners(harris_corners, C_i, P_i, params);
+proposed_points = getNewCandidateKeypoints(image,[P_i C_i], params);
 
 curr_Tau = [Twc_i(1:3,1); Twc_i(1:3,2); Twc_i(1:3,3); Twc_i(1:3,4)];
 %1*12 vectorized current Twc_i

@@ -1,4 +1,4 @@
-function [S_i, Twc_i] = process_frame(image, S_i, K, params)
+function [S_i, Twc_i] = process_frame(image, S_i, Twc_i, K, params)
 % PROCESS_FRAME iterates the VO pipeline by processing a new frame.
 % Arguments:
 % Current and previous images (image, prev_image)
@@ -34,6 +34,9 @@ S_i = refresh_keypoints(S_i, Twc_i, K, params);
 % get new possible keypoints - the Harris corners that do not coincide with
 % the current C_i or P_i
 S_i = get_new_canditates(image, S_i, Twc_i, params);
+% output the average reprojection error for debug purposes
+[avg_reprojection_error, ~] = get_reprojection_error(S_i.P_i, S_i.X_i, Twc_i, K);
+fprintf("The average reprojection error is %f", avg_reprojection_error)
 
 
 end

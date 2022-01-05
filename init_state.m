@@ -33,8 +33,8 @@ S.F_i  = c;
 T_WC_vec = T_WC(:);
 S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
 % init trackers
-S.KLT_Point_Tracker = vision.PointTracker();
-S.KLT_Candidate_Tracker = vision.PointTracker();
+S.KLT_Point_Tracker = vision.PointTracker("NumPyramidLevels",5,"MaxBidirectionalError",1);
+S.KLT_Candidate_Tracker = vision.PointTracker("NumPyramidLevels",5,"MaxBidirectionalError",1);
 initialize(S.KLT_Point_Tracker, S.P_i', img);
 initialize(S.KLT_Candidate_Tracker, S.C_i', img)
 end

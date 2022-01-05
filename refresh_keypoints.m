@@ -29,25 +29,29 @@ bearing_angles = acos(cos_angles); %angles, 1*M
 % select the indices which we will triangulate
 triangulation_indices = bearing_angles > params.min_bearing_angle;
 % triangulate points and get the new X_i, P_i values
-X_new = triangulate_new_landmarks(C_i(:,triangulation_indices),...
+[X_new, behind_cam_indices] = triangulate_new_landmarks(C_i(:,triangulation_indices),...
     F_i(:,triangulation_indices), Tau_i(:,triangulation_indices), Twc_i, K);
-X_i = [X_i, X_new];
-P_i = [P_i, C_i(:,triangulation_indices)];
+points_to_add = C_i(:,triangulation_indices);
 % discard the added points from C_i, F_i, Tau_i
 % Calculate the backprojection error for debug purposes
-projection_matrix = K * Twc_i(1:3,:);
-projected_points = projection_matrix * X_i;
-projected_points = projected_points./projected_points (3,:);
-reprojection_errors = projected_points(1:2,:) - P_i;
-avg_repro_err = mean(vecnorm(reprojection_errors,1));
-fprintf("Average reprojection error is %f\n", avg_repro_err)
+[avg_reprojection_error, errors] = get_reprojection_error(points_to_add, X_new, Twc_i, K);
+% Exclude the new keypts that have a higher reprojection err than a
+% threshold
+faulty_keypts = vecnorm(errors,1) > 10;
+indices_to_keep = ~behind_cam_indices & ~faulty_keypts;
+X_i = [X_i, X_new(:,indices_to_keep)];
+P_i = [P_i, points_to_add(:,indices_to_keep)];
+fprintf("There are %i keypoints that have a higher error than 10. Removed them.\n", sum(faulty_keypts))
+[avg_reprojection_error, errors] = get_reprojection_error(points_to_add(:,indices_to_keep), X_new(:,indices_to_keep), Twc_i, K);
+fprintf("Average reprojection error of new points is %f\n", avg_reprojection_error)
 %reprojected_points - get them from cam matrix and current position!
 % calculate previous and newly added repro error.
 C_i = C_i(:, ~triangulation_indices);
 F_i = F_i(:, ~triangulation_indices);
 Tau_i = Tau_i(:, ~triangulation_indices);
 
-fprintf("Added %i new keypoints!\n", sum(triangulation_indices));
+fprintf("Added %i new keypoints!\n", sum(indices_to_keep));
+display(errors)
 % set fields of the output S_i
 S_i.P_i = P_i;
 S_i.X_i = X_i;

@@ -7,12 +7,12 @@ function [Tcw_i, P_i, X_i] = get_pose(P_i, X_i, K, params)
 % utilize the given p3p function with modifications
 
 % Get pose
- cameraParams = cameraIntrinsics([K(1), K(2,2)],[K(1,3), K(2,3)],params.image_size);
+ cameraParams = cameraIntrinsics([K(1), K(2,2)],[K(1,3), K(2,3)], params.image_size);
  [worldOrientation,worldLocation, inlierIdx] = estimateWorldCameraPose(double(P_i)',...
-     X_i',cameraParams, 'MaxNumTrials', 2500);
+     X_i',cameraParams, 'MaxNumTrials', 2500, "MaxReprojectionError",params.ransac_max_repro_err);
  R_C_W = worldOrientation';
  t_C_W = -R_C_W*worldLocation';
-
+fprintf("Number of points dropped by pose ransac: %i", sum(~inlierIdx))
 %[R_C_W, t_C_W, ~, ~, ~] = ransacLocalization(P_i, X_i, K, params);
 % Convert to our fromat
 Tcw_i = [R_C_W t_C_W; 0 0 0 1];

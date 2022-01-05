@@ -7,6 +7,7 @@ function [P_i, P_prev, X_i] = filter_points(P_i, P_prev, X_i, point_scores, poin
 % Test if points are in image
 points_in_image = all([P_i > 0; P_i < [params.image_size(2); params.image_size(1)]],1);
 point_valid_score = point_scores' > params.point_score_thresh;
+fprintf("Number of points dropped by tracker: %i\n", sum(~point_valid_score))
 point_validity = all([point_valid_score; points_in_image],1);
 % apply indices
 P_i = P_i(:,point_validity);

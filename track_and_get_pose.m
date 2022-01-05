@@ -46,6 +46,27 @@ Rwc = Rcw';
 t_wc = -Rwc*t_cw;
 Twc_i = [Rwc, t_wc; 0 0 0 1];
 
+% refine the pose with bundle adjustment / Matlab version only takes more
+% than 2, keep this around if we'd use BA later
+% construct the pointTracks object
+% pointTracks = [];
+% for i = 1:size(P_i,2)
+%     pointTracks = [pointTracks pointTrack([1],P_i(:,i)')];
+% end
+% % construct cameraPoses
+% cameraPoses = table([1],reshape(Rwc,1,3,3),t_wc');
+% % construct intrinsics
+% intrinsics = cameraIntrinsics([K(1,1) K(2,2)],[K(1,3) K(2,3)], params.image_size);
+% % construct the cameraPoses
+% [xyzRefinedPoints,refinedPoses] = bundleAdjustment(X_i(1:3,:)',pointTracks,cameraPoses,intrinsics);
+
+% nonlinearly refine pose
+options = optimoptions(@lsqnonlin, 'Display', 'iter', ...
+    'MaxIter', 50);
+
+error_terms = @(Twc_i) get_reprojection_error(P_i, X_i, Twc_i, K);
+Twc_i = lsqnonlin(error_terms, Twc_i, [], [], options);
+
 % set the output dict
 S_i.P_i = P_i;
 S_i.X_i = X_i;
