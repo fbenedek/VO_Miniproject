@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<struct>
+    <use_adaptive_ransac>true</use_adaptive_ransac>
+    <ransac_min_inlier_count>10</ransac_min_inlier_count>
+    <ransac_pixel_tolerance>10</ransac_pixel_tolerance>
+    <ransac_num_iters>3000</ransac_num_iters>
+    <ransac_k>3</ransac_k>
+    <ransac_UB_outlier>0.9</ransac_UB_outlier>
+    <ransac_confidence>0.95</ransac_confidence>
+    <ransac_adaptive_cap>15000</ransac_adaptive_cap>
+    <point_score_thresh>0.85</point_score_thresh>
+    <candidate_score_thresh>0.9</candidate_score_thresh>
+    <proposal_test_norm>cityblock</proposal_test_norm>
+    <initial_match_threshold>10</initial_match_threshold>
+    <initial_ransac_trials>5000</initial_ransac_trials>
+    <initial_depth_threshold_multiplier>10</initial_depth_threshold_multiplier>
+    <min_harris_feature_quality>0.005</min_harris_feature_quality>
+    <non_max_suppression_radius>5</non_max_suppression_radius>
+    <candidate_dist_threshold>10</candidate_dist_threshold>
+    <plot_history_length>20</plot_history_length>
+    <min_new_point_distance>5</min_new_point_distance>
+    <min_bearing_angle>0.2</min_bearing_angle>
+    <harris_min_quality>0.001</harris_min_quality>
+    <harris_gaussian_dim>5</harris_gaussian_dim>
+</struct>
