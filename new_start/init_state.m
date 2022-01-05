@@ -24,18 +24,16 @@ function [S, T_WC] = init_state(P_0, X_0, T_WC, img, params)
 
 
 % find keypoint candidates
-params.corner_patch_size = 7;
-params.harris_kappa = 0.15;
-params.num_new_candidates = 100;
-params.nonmaximum_supression_radius = 20;
 params.use_shi_tomasi = 1;
-
+if params.use_histeq
+    img = histeq(img);
+end
 c = getCandidateCorners(img,P_0, params);
 % flip to match convention
 c = flipud(c);
 
 S.P_i = P_0;
-S.X_i  = X_0;
+S.X_i  = X_0(1:3,:);
 S.C_i  = c;
 S.F_i  = c;
 T_WC_vec = T_WC(:);
@@ -44,6 +42,8 @@ S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
 S.KLT_Point_Tracker = vision.PointTracker();
 S.KLT_Candidate_Tracker = vision.PointTracker();
 initialize(S.KLT_Point_Tracker, S.P_i', img);
-initialize(S.KLT_Candidate_Tracker, S.C_i', img)
+initialize(S.KLT_Candidate_Tracker, S.C_i', img);
+S.KLT_Candidate_Tracker.BlockSize = [15,15];
+S.KLT_Point_Tracker.BlockSize = [15,15];
 end
 

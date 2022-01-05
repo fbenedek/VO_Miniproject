@@ -5,13 +5,16 @@ function keypoints = selectKeypoints(scores, num, r)
 keypoints = zeros(2, num);
 temp_scores = padarray(scores, [r r]);
 for i = 1:num
-    [~, kp] = max(temp_scores(:));
+    [val, kp] = max(temp_scores(:));
+    if val  == 0
+        break
+    end
     [row, col] = ind2sub(size(temp_scores), kp);
     kp = [row;col];
     keypoints(:, i) = kp - r;
     temp_scores(kp(1)-r:kp(1)+r, kp(2)-r:kp(2)+r) = ...
         zeros(2*r + 1, 2*r + 1);
 end
-
+keypoints = keypoints(:, keypoints(1,:)>0);
 end
 

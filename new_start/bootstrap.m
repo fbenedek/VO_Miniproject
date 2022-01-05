@@ -12,15 +12,17 @@ function [P_0, X_0, T_WC] = bootstrap(img0, img1, K, params)
 %   camera frame from img0 is considered as the world frame
 %   T_WC, transformation from world frame (img0) to camera frame from img1
 
-corner_patch_size = 7;
+corner_patch_size = 5;
 harris_kappa = 0.1;
-num_keypoints = 350;
-nonmaximum_supression_radius = 9;
+num_keypoints = 600;
+nonmaximum_supression_radius = 12;
 descriptor_radius = 9;
 match_lambda = 4;
 use_shi_tomasi = 0;
 
-img0 = histeq(img0); img1 = histeq(img1);
+if params.use_histeq
+    img0 = histeq(img0); img1 = histeq(img1);
+end
 
 if use_shi_tomasi
     score0 = shi_tomasi(img0, corner_patch_size);
@@ -42,6 +44,12 @@ matches = matchDescriptors(descriptors1, descriptors0, match_lambda);
 
 kp1 = keypoints1(:, query_indices);
 kp0 = keypoints0(:, match_indices);
+kp_dist = sqrt(sum((kp1-kp0).^2,1));
+kp_dist_mask = kp_dist > 8 & kp_dist < 64;
+
+kp0 = kp0(:,kp_dist_mask);
+kp1 = kp1(:,kp_dist_mask);
+
 figure(4)
 imshow(img1)
 hold on;

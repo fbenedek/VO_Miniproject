@@ -57,10 +57,10 @@ else
     plot((-hist_length+1):0, n_landmark_hist(end-hist_length+1:end));
 end
 title("# of tracked landmarks for last " + hist_length + " frames");
-
-if size(n_landmark_hist,2) > 1
-    xlim([-size(n_landmark_hist,2)+1,0])
-end
+% 
+% if size(n_landmark_hist,2) > 1
+%     xlim([-size(n_landmark_hist,2)+1,0])
+% end
 
 subplot(2,4,6);
 plot(t_WC_hist(1,:), t_WC_hist(3,:), 'bo');
