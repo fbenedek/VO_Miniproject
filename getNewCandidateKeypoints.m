@@ -21,6 +21,7 @@ lambda = params.candidate_dist_threshold;
 
 % find harris corners
 points = detectHarrisFeatures(histeq(img), 'MinQuality', min_harris_quality);
+points = detectFASTFeatures(img)
 
 %tic;
 points = nonMaxSupression(points, non_max_suppression_radius);

@@ -127,10 +127,8 @@ end
 
 
 addpath('functions/');
-% patch_r = 4;
-% [kpt, ldm] = init_VO(img0, img1, K, patch_r);
-% visualizeLandmarks(img1, kpt, ldm);
-
+% init image size
+params.image_size = size(img0);
 % having img1, img2 we will run our triangulation here
 [P_0, X_0, Twc_i] = bootstrap(img0, img1, K, params);
 % img0, img1 are the images returned by the bootstrap_frames indexes
@@ -159,8 +157,6 @@ fig = figure;
 t_WC_hist = [];
 n_landmark_hist = [];
 [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S_i, Twc_i, params);
-% init image size
-params.image_size = size(img0);
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;
 for i = range

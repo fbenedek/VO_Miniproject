@@ -35,7 +35,12 @@ X_i = [X_i, X_new];
 P_i = [P_i, C_i(:,triangulation_indices)];
 % discard the added points from C_i, F_i, Tau_i
 % Calculate the backprojection error for debug purposes
-projection_matrix = K * Twc_i(1:3,:);
+
+R_cw = Twc_i(1:3,1:3)';
+t_cw = -R_cw*Twc_i(1:3,4);
+T_cw = [R_cw, t_cw];
+
+projection_matrix = K * T_cw;
 projected_points = projection_matrix * X_i;
 projected_points = projected_points./projected_points (3,:);
 reprojection_errors = projected_points(1:2,:) - P_i;
