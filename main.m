@@ -1,5 +1,6 @@
   %% Setup
 % read parameters from params.xml
+clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
 ds = 2; % 0: KITTI, 1: Malaga, 2: parking
@@ -127,7 +128,8 @@ params.image_size = size(img0);
 fig = figure;
 t_WC_hist = [];
 n_landmark_hist = [];
-[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img1, S_i, Twc_i, params);
+[t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, ...
+    img1, S_i, Twc_i, bootstrap_frames(2),params);
 %% Continuous operation
 range = (bootstrap_frames(2)+1):last_frame;
 for i = range
@@ -157,7 +159,7 @@ for i = range
     [S_i, Twc_i] = process_frame(image, S_i, K, params);
     % Twc_i is 4*4 matrix containing the current pose
     
-    [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, image, S_i, Twc_i, params);
+    [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, image, S_i, Twc_i,i, params);
     % Makes sure that plots refresh.    
     % Plot results
     % Plot the following:

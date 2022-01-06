@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <struct>
     <num_initial_candidates>100</num_initial_candidates>
+    <num_continous_candidates>100</num_continous_candidates>
     <points_num_target>350</points_num_target>
-    <use_adaptive_ransac>true</use_adaptive_ransac>
+
     <point_tracker_levels>5</point_tracker_levels>
     <point_tracker_max_error>0.5</point_tracker_max_error>
     <point_tracker_block_size>31</point_tracker_block_size>
+    
+    <candidate_tracker_block_size>31</candidate_tracker_block_size>
     <candidate_tracker_levels>5</candidate_tracker_levels>
     <candidate_tracker_max_error>0.5</candidate_tracker_max_error>
-    <ransac_adaptive_cap>15000</ransac_adaptive_cap>
-    <point_score_thresh>0.85</point_score_thresh>
+    
+    <point_score_thresh>0.90</point_score_thresh>
     <candidate_score_thresh>0.9</candidate_score_thresh>
+    
+    <max_rp_err_for_triangulation>0.5</max_rp_err_for_triangulation>
+    <use_simple_triangulation_criteria>1</use_simple_triangulation_criteria>
+    <reproject_landmarks>0</reproject_landmarks>
+    
     <proposal_test_norm>cityblock</proposal_test_norm>
     <min_harris_feature_quality>0.005</min_harris_feature_quality>
     <non_max_suppression_radius>5</non_max_suppression_radius>

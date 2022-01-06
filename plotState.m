@@ -1,4 +1,4 @@
-function [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img, state, T_WC, params)
+function [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, img, state, T_WC, frame, params)
 % PLOTSTATE generates the plot as requested in project statement. 
 % inputs:
 %   fig: The figure containing the plot
@@ -34,7 +34,7 @@ imshow(img); hold on;
 plot(state.P_i(1,:), state.P_i(2,:),'g+', 'MarkerSize', 6, 'LineWidth', 2);
 plot(state.C_i(1,:), state.C_i(2,:),'r+', 'MarkerSize', 6, 'LineWidth', 2);
 hold off;
-title('Current image')
+title("Current image, frame no. " + frame)
 legend('Current keypoints', 'Candidate keypoints',  'Location','southeast');
 
 % plot trajectoy and current landmarks
@@ -58,9 +58,9 @@ else
 end
 title("# of tracked landmarks for last " + hist_length + " frames");
 
-if size(n_landmark_hist,2) > 1
-    xlim([-size(n_landmark_hist,2)+1,0])
-end
+% if size(n_landmark_hist,2) > 1
+%     xlim([-size(n_landmark_hist,2)+1,0])
+% end
 
 subplot(2,4,6);
 plot(t_WC_hist(1,:), t_WC_hist(3,:), 'bo');

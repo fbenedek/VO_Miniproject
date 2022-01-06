@@ -1,4 +1,4 @@
-function X_new = triangulate_new_landmarks(C_i, F_i, Tau_i, Twc_i, K)
+function [X_new, P_new] = triangulate_new_landmarks(C_i, F_i, Tau_i, Rt_WC, K, params)
 %TRIANGULATE NEW LANDMARKS triangulates new landmarks using current observations
 %C_i and first observations F_i if the bearing angles exceed a given
 %threshold
@@ -10,30 +10,31 @@ function X_new = triangulate_new_landmarks(C_i, F_i, Tau_i, Twc_i, K)
 
 m = size(C_i,2);
 
-p1 = [C_i; ones(1,m)]; %homogeneous img coordinates (current)
-
-R_WC = Twc_i(1:3,1:3);
-t_WC = Twc_i(1:3,4);
+R_WC = Rt_WC(1:3,1:3);
+t_WC = Rt_WC(1:3,4);
 R_CW = R_WC';
 t_CW = -R_CW*t_WC;
 Rt_CW = [R_CW,t_CW]; %current [R|t] matrix, 3*4
-M1 = K*Rt_CW; %current projection matrix, 3*4
+M2 = K * Rt_CW;
 
-p2 = [F_i; ones(1,m)]; %homogeneous img coordinates (first view)
-
-X_new_homog = zeros(4,m); %result of linearTriangulation
+X_new = zeros(3,m); %result of linearTriangulation
+repro_err = zeros(1,m);
 for i = 1:m
-    R_WC_from_Tau = [Tau_i(1:3,i), Tau_i(4:6,i), Tau_i(7:9,i)]; %3*3
-    t_WC_from_Tau = Tau_i(10:12,i);
-    R_CW_from_Tau = R_WC_from_Tau';
-    t_CW_from_Tau = -R_CW_from_Tau*t_WC_from_Tau;
-    Rt_CW_from_Tau = [R_CW_from_Tau, t_CW_from_Tau];  %first view [R|t] matrix, 3*4
-    M2 = K*Rt_CW_from_Tau; %first view projection matrix, 3*4
+    T_WC_tau = reshape(Tau_i(:,i),3,4);
+    R_CW_tau = T_WC_tau(1:3,1:3)';
+    t_CW_tau = -R_CW_tau*T_WC_tau(:,end);
+    T_cw_tau = [R_CW_tau, t_CW_tau];
+    M1 = K*T_cw_tau;
     
-    X_new_homog(:,i) = linearTriangulation(p1(:,i),p2(:,i),M1,M2);
-        % currently implements triangulation 1-by-1 which is not ideal, but
-        % M2 changes
+    X_new(1:3,i) = triangulate(F_i(:,i)',C_i(:,i)',M1',M2');
+    
+    X_new(1:3,i) = refineTriangulation(F_i(:,i),C_i(:,i),...
+                        X_new(1:3,i),T_cw_tau, Rt_CW, K, params);
+    repro_err(i) = avgReprojectionErr(M2, C_i(:,i), X_new(:,i));
 end
 
-%X_new = X_new_homog(1:3,:);
-X_new = X_new_homog;
+X_new_in_cur_frame = Rt_CW*[X_new;ones(1,m)];
+repro_err_mask = repro_err < params.max_rp_err_for_triangulation...
+    & X_new_in_cur_frame(3,:) > 0 & X_new_in_cur_frame(3,:) < 500;
+X_new = X_new(1:3, repro_err_mask);
+P_new = C_i(:,repro_err_mask);

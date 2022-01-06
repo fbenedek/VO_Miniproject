@@ -1,4 +1,4 @@
-function [S_i, Twc_i] = process_frame(image, S_i, K, params)
+function [S_i, Rt_WC] = process_frame(image, S_i, K, params)
 % PROCESS_FRAME iterates the VO pipeline by processing a new frame.
 % Arguments:
 % Current and previous images (image, prev_image)
@@ -25,15 +25,15 @@ function [S_i, Twc_i] = process_frame(image, S_i, K, params)
 
 % 4.1 and 4.2: Track keypoints + candidates and get camera pose and filtered keypoints
 % from p3p ransac
-[Twc_i, S_i] = track_and_get_pose(image, S_i, K, params);
+[Rt_WC, S_i] = track_and_get_pose(image, S_i, K, params);
 
 % 4.3 triangulate and add new points if possible
 % triangulate the points that have a sufficient bearing angle and add them
 % to the keypoints
-S_i = refresh_keypoints(S_i, Twc_i, K, params);
+S_i = refresh_keypoints(S_i, Rt_WC, K, params);
 % get new possible keypoints - the Harris corners that do not coincide with
 % the current C_i or P_i
-S_i = get_new_canditates(image, S_i, Twc_i, params);
+S_i = get_new_canditates(image, S_i, Rt_WC, params);
 
 
 end
