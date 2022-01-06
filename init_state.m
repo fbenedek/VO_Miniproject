@@ -23,19 +23,29 @@ function [S, T_WC] = init_state(P_0, X_0, T_WC, img, params)
 %       T_WC)
 
 
-% find keypoint candidates
-c = getNewCandidateKeypoints(img,P_0, params);
+hold off
+c = double(getCornersSpread(img, [], params.num_initial_candidates, params).Location');
+% figure
+% imshow(img)
+% hold on
+% plot(c2)
+% plot(cornerPoints(c'))
+% hold off
 
 S.P_i = P_0;
-S.X_i  = X_0;
+S.X_i  = X_0(1:3,:);
 S.C_i  = c;
 S.F_i  = c;
 T_WC_vec = T_WC(:);
 S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
 % init trackers
-S.KLT_Point_Tracker = vision.PointTracker();
-S.KLT_Candidate_Tracker = vision.PointTracker();
+S.KLT_Point_Tracker = vision.PointTracker('NumPyramidLevels', ...
+    params.point_tracker_levels, 'MaxBidirectionalError',params.point_tracker_max_error,...
+    'BlockSize', [params.point_tracker_block_size,params.point_tracker_block_size]);
+S.KLT_Candidate_Tracker = vision.PointTracker('NumPyramidLevels',...
+    params.candidate_tracker_levels, 'MaxBidirectionalError',params.candidate_tracker_max_error,...
+    'BlockSize', [params.candidate_tracker_block_size,params.candidate_tracker_block_size]);
 initialize(S.KLT_Point_Tracker, S.P_i', img);
-initialize(S.KLT_Candidate_Tracker, S.C_i', img)
+initialize(S.KLT_Candidate_Tracker, S.C_i', img);
 end
 
