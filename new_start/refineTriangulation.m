@@ -1,11 +1,12 @@
 function X = refineTriangulation(P,X_0, T_cw, K, params)
-%REFINETRIANGULATION Summary of this function goes here
+%REFINETRIANGULATION Obtains a refined pointcloud from the past view
 %   Detailed explanation goes here
 
-error_function = @(x) reprojectionError(x,P,T_cw, K);
+error_function = @(x) sum(vecnorm(reprojectionError(x,P,T_cw, K),1));
 options = optimoptions(@lsqnonlin,'Display','none','MaxIter', 20, 'Algorithm', 'levenberg-marquardt');
 X = lsqnonlin(error_function, X_0, [], [], options);
 end
+
 
 
 function e = reprojectionError(x,kpt,T_cw, K)

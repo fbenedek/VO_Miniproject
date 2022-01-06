@@ -3,7 +3,7 @@
 % read parameters from params.xml
 params =  readstruct("params.xml","FileType","xml");
 
-ds = 0; % 0: KITTI, 1: Malaga, 2: parking
+ds = 2; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -16,7 +16,7 @@ if ds == 0
         0 7.188560000000e+02 1.852157000000e+02
         0 0 1];
 elseif ds == 1
-    % Path containing the many fi5374965328684e+03les of Malaga 7.
+    % Path containing the many files of Malaga 7.
     malaga_path = 'data/malaga-urban-dataset-extract-07/';
     assert(exist('malaga_path', 'var') ~= 0);
     images = dir([malaga_path ...
@@ -118,7 +118,7 @@ for i = range
     fprintf('\n\nProcessing frame %d\n=====================\n', i);
     if ds == 0
         image = imread([kitti_path '/05/image_0/' sprintf('%06d.png',i)]);
-    elseif ds == 1KLT_Candidate_Tracker
+    elseif ds == 1
         image = rgb2gray(imread([malaga_path ...
             '/malaga-urban-dataset-extract-07_rectified_800x600_Images/' ...
             left_images(i).name]));
@@ -138,7 +138,7 @@ for i = range
         assert(false);
     end
     % Markovian forward iteration
-    [S_i, Twc_i] = processFrame(image, S_i, K, params);
+    [S_i, Twc_i] = processFrame(image, S_i, K, i, params);
     
     [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, image, S_i, Twc_i, params);
 

@@ -38,6 +38,7 @@ S.C_i  = c;
 S.F_i  = c;
 T_WC_vec = T_WC(:);
 S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
+S.Candidate_Views_i = repmat([1],1,size(c,2));
 % init trackers
 S.KLT_Point_Tracker = vision.PointTracker();
 S.KLT_Candidate_Tracker = vision.PointTracker();
@@ -45,5 +46,17 @@ initialize(S.KLT_Point_Tracker, S.P_i', img);
 initialize(S.KLT_Candidate_Tracker, S.C_i', img);
 S.KLT_Candidate_Tracker.BlockSize = [15,15];
 S.KLT_Point_Tracker.BlockSize = [15,15];
+S.KLT_Point_Tracker.MaxBidirectionalError = 1;
+S.Locations = [0 0 0];
+S.Orientations = reshape(eye(3),1,3,3);
+S.Prev_Pose_CW = [eye(3), [0; 0; 0]];
+S.Point_Tracks_i = {};
+S.View_Ids = [1];
+for i = 1:length(P_0)
+    S.Point_Tracks_i{end + 1} = [1];
+end
+S.Point_Coordinates_i = {};
+for i = 1:length(P_0)
+    S.Point_Coordinates_i{end + 1} = P_0(:,i)';
 end
 
