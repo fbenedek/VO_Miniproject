@@ -12,7 +12,7 @@
     <candidate_tracker_levels>5</candidate_tracker_levels>
     <candidate_tracker_max_error>0.5</candidate_tracker_max_error>
     
-    <point_score_thresh>0.90</point_score_thresh>
+    <point_score_thresh>0.7</point_score_thresh>
     <candidate_score_thresh>0.9</candidate_score_thresh>
     
     <max_rp_err_for_triangulation>0.5</max_rp_err_for_triangulation>

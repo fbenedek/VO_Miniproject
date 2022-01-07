@@ -33,7 +33,7 @@ end
 corners = cornerPoints(c_location, 'Metric', c_metric);
 
 if existing_points
-    D = pdist2(existing_points', corners.Location, params.proposal_test_norm, 'Smallest', 1);
+    D = pdist2(existing_points', double(corners.Location), params.proposal_test_norm, 'Smallest', 1);
     distinct_points = D > 10;
     corners = corners(distinct_points);
 end

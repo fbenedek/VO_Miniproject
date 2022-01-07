@@ -3,7 +3,7 @@
 clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
-ds = 2; % 0: KITTI, 1: Malaga, 2: parking
+ds = 1; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"

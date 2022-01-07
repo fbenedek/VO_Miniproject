@@ -8,7 +8,7 @@ function [Rt_WC, P_i, X_i] = get_pose(P_i, X_i, K, params)
 
 % Get pose
 cameraParams = cameraIntrinsics([K(1), K(2,2)],[K(1,3), K(2,3)],params.image_size);
-[R_wc,t_wc,inlierIdx] = estimateWorldCameraPose(P_i', X_i',cameraParams, 'MaxReprojectionError', 1);
+[R_wc,t_wc,inlierIdx] = estimateWorldCameraPose(P_i', X_i',cameraParams, 'MaxReprojectionError', 2);
 fprintf('\n inlier ratio estimateWorldCameraPose %4.2f %%', 100*sum(inlierIdx)/max(1,size(inlierIdx,1)));
 
 [rotationMatrix,translationVector] = cameraPoseToExtrinsics(R_wc,t_wc);

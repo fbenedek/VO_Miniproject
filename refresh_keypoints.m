@@ -14,7 +14,7 @@ M = size(C_i,2);
 if params.use_simple_triangulation_criteria
     C_diff= C_i-F_i;
     C_dist = sqrt(sum((C_diff).^2,1));
-    triangulation_indices = C_dist > 30 & C_dist < 300;
+    triangulation_indices = C_dist > 5 & C_dist < 300;
 else
     % calculate bearing_angles, an 1*M matrix containing bearing angles between
     % each F_i,Tau_i (first view) pair and the current C_i, Twc_i
