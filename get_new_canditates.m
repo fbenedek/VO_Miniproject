@@ -9,6 +9,7 @@ X_i = S_i.X_i;
 C_i = S_i.C_i;
 F_i = S_i.F_i;
 Tau_i = S_i.Tau_i;
+BA_Candidate_Views_i = S_i.BA_Candidate_Views_i;
 
 if size(S_i.P_i,2) + size(S_i.C_i,2) < params.points_num_target
     C_new = double(getCornersSpread(image, [S_i.P_i, S_i.C_i],params.num_continous_candidates, params).Location');
@@ -28,5 +29,5 @@ S_i.X_i = X_i;
 S_i.C_i = [C_i, C_new];
 S_i.F_i = [F_i, C_new];
 S_i.Tau_i = [Tau_i, Tau_new];
-
+S_i.BA_Candidate_Views_i = [BA_Candidate_Views_i, repmat([S_i.image_idx], 1, size(C_new,2))];
 end

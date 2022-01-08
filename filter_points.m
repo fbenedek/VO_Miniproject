@@ -1,4 +1,4 @@
-function [P_i, P_prev, X_i] = filter_points(P_i, P_prev, X_i, point_scores, point_validity, params)
+function [P_i, P_prev, X_i, BA_Point_Tracks_i, BA_Point_Coordinates_i] = filter_points(P_i, P_prev, X_i, point_scores, point_validity, BA_Point_Tracks_i, BA_Point_Coordinates_i, params)
 % FILTER_POINTS checks if the tracked points are still in the image and are
 % tracked with a confidence that is greater than params.point_score_tresh
 % params.image_size should be set to size(I) at the beginning of the
@@ -14,4 +14,7 @@ point_validity = point_validity & (point_scores > params.point_score_thresh);
 P_i = P_i(:,point_validity);
 P_prev = P_prev(:,point_validity);
 X_i = X_i(:, point_validity);
+BA_Point_Tracks_i = BA_Point_Tracks_i(point_validity); 
+BA_Point_Coordinates_i = BA_Point_Coordinates_i(point_validity);
+
 end

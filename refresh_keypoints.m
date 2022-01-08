@@ -8,6 +8,10 @@ X_i = S_i.X_i;
 C_i = S_i.C_i;
 F_i = S_i.F_i;
 Tau_i = S_i.Tau_i;
+BA_Point_Tracks_i = S_i.BA_Point_Tracks_i;
+BA_Point_Coordinates_i = S_i.BA_Point_Coordinates_i;
+BA_Candidate_Views_i = S_i.BA_Candidate_Views_i;
+image_idx = S_i.image_idx;
 
 M = size(C_i,2);
 
@@ -34,12 +38,24 @@ else
     % select the indices which we will triangulate
     triangulation_indices = bearing_angles > params.min_bearing_angle;
 end
+% store the views to add for bundle adjustment
+Views_To_Add = BA_Candidate_Views_i(triangulation_indices);
+Coords_To_Add = C_i(:,triangulation_indices);
 
 % triangulate points and get the new X_i, P_i values
-[X_new, P_new] = triangulate_new_landmarks(C_i(:,triangulation_indices),...
+[X_new, P_new, repro_err_mask] = triangulate_new_landmarks(C_i(:,triangulation_indices),...
     F_i(:,triangulation_indices), Tau_i(:,triangulation_indices), Twc_i, K, params);
 X_i = [X_i, X_new];
 P_i = [P_i, P_new];
+Views_To_Add = Views_To_Add(repro_err_mask);
+Coords_To_Add = Coords_To_Add(:,repro_err_mask);
+% update BA variables as well
+% Add new points to bundle adjusted structures
+for j = 1 : length(Views_To_Add)
+    BA_Point_Tracks_i{end+1} = [Views_To_Add(j) image_idx];
+    BA_Point_Coordinates_i{end+1} = [Coords_To_Add(:,j)'; P_new(:,j)'];
+end
+
 % discard the added points from C_i, F_i, Tau_i
 % Calculate the backprojection error for debug purposes
 
@@ -54,6 +70,7 @@ fprintf("Average reprojection error is %f\n", avg_repro_err)
 % calculate previous and newly added repro error.
 C_i = C_i(:, ~triangulation_indices);
 F_i = F_i(:, ~triangulation_indices);
+BA_Candidate_Views_i = BA_Candidate_Views_i(~triangulation_indices);
 Tau_i = Tau_i(:, ~triangulation_indices);
 
 if params.reproject_landmarks
@@ -68,4 +85,7 @@ S_i.X_i = X_i;
 S_i.C_i = C_i;
 S_i.F_i = F_i;
 S_i.Tau_i = Tau_i;
+S_i.BA_Point_Tracks_i = BA_Point_Tracks_i;
+S_i.BA_Point_Coordinates_i = BA_Point_Coordinates_i;
+S_i.BA_Candidate_Views_i = BA_Candidate_Views_i;
 end

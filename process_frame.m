@@ -34,6 +34,21 @@ S_i = refresh_keypoints(S_i, Rt_WC, K, params);
 % get new possible keypoints - the Harris corners that do not coincide with
 % the current C_i or P_i
 S_i = get_new_canditates(image, S_i, Rt_WC, params);
+% 4.4 Do bundle adjustment on the point cloud to get a maximal precision
+S_i = bundle_adjustment(S_i, K, params);
+% Extra: reinit if keypoints get too low
+% backup frames
+display(length(S_i.BA_View_Ids) <= params.re_init_frame_distance)
+if length(S_i.BA_View_Ids) <= params.re_init_frame_distance
+    S_i.backup_frames = [S_i.backup_frames image];
+    S_i.backup_origins = [S_i.backup_origins Rt_WC];
+else
+    S_i.backup_origins = {S_i.backup_origins{2:end} Rt_WC};
+    S_i.backup_frames = {S_i.backup_frames{2:end} image};
+end
 
+if length(S_i.X_i) < params.re_init_min_kps
+ S_i = re_init(S_i, K, params);
+end
 
 end

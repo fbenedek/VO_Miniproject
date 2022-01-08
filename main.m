@@ -3,7 +3,7 @@
 clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
-ds = 2; % 0: KITTI, 1: Malaga, 2: parking
+ds = 0; % 0: KITTI, 1: Malaga, 2: parking
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -155,6 +155,8 @@ for i = range
     else
         assert(false);
     end
+    % Set image index
+    S_i.image_idx = i;
     % Markovian forward iteration
     [S_i, Twc_i] = process_frame(image, S_i, K, params);
     % Twc_i is 4*4 matrix containing the current pose

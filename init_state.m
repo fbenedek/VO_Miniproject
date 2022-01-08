@@ -38,6 +38,8 @@ S.C_i  = c;
 S.F_i  = c;
 T_WC_vec = T_WC(:);
 S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
+S.backup_frames = {};
+S.backup_origins = {};
 % init trackers
 S.KLT_Point_Tracker = vision.PointTracker('NumPyramidLevels', ...
     params.point_tracker_levels, 'MaxBidirectionalError',params.point_tracker_max_error,...
@@ -47,5 +49,7 @@ S.KLT_Candidate_Tracker = vision.PointTracker('NumPyramidLevels',...
     'BlockSize', [params.candidate_tracker_block_size,params.candidate_tracker_block_size]);
 initialize(S.KLT_Point_Tracker, S.P_i', img);
 initialize(S.KLT_Candidate_Tracker, S.C_i', img);
+% init bundle adjustment variables
+S = init_BA(S, P_0);
 end
 

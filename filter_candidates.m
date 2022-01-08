@@ -1,4 +1,6 @@
-function [C_i, F_i, Tau_i] = filter_candidates(C_i, F_i, Tau_i, candidate_scores,candidate_validity, params)
+function [C_i, F_i, Tau_i, BA_Candidate_Views_i] = ...
+    filter_candidates(C_i, F_i, Tau_i, candidate_scores, ...
+    candidate_validity, BA_Candidate_Views_i, params)
 % FILTER_CANDIDATES checks if candidate points are still in the image and
 % if they have sufficiently low SSD distance from the previous frame. For
 % the latter, the threshold params.candidate_score_thresh can be set.
@@ -12,4 +14,5 @@ candidate_validity = candidate_validity & (candidate_scores > params.candidate_s
 C_i = C_i(:,candidate_validity);
 F_i = F_i(:, candidate_validity);
 Tau_i = Tau_i(:, candidate_validity);
+BA_Candidate_Views_i = BA_Candidate_Views_i(candidate_validity);
 end

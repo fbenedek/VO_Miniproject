@@ -29,7 +29,7 @@ if params.use_histeq
     img = histeq(img);
 end
 c = getCandidateCorners(img,P_0, params);
-% flip to match convention
+% flip to match conventionS.Candidate_Views_i = repmat([1],1,size(c,2));
 c = flipud(c);
 
 S.P_i = P_0;
@@ -38,7 +38,7 @@ S.C_i  = c;
 S.F_i  = c;
 T_WC_vec = T_WC(:);
 S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
-S.Candidate_Views_i = repmat([1],1,size(c,2));
+
 % init trackers
 S.KLT_Point_Tracker = vision.PointTracker();
 S.KLT_Candidate_Tracker = vision.PointTracker();
@@ -52,6 +52,7 @@ S.Orientations = reshape(eye(3),1,3,3);
 S.Prev_Pose_CW = [eye(3), [0; 0; 0]];
 S.Point_Tracks_i = {};
 S.View_Ids = [1];
+S.BA_Candidate_Views_i = repmat([1],1,size(c,2));
 for i = 1:length(P_0)
     S.Point_Tracks_i{end + 1} = [1];
 end

@@ -1,4 +1,4 @@
-function [X_new, P_new] = triangulate_new_landmarks(C_i, F_i, Tau_i, Rt_WC, K, params)
+function [X_new, P_new, repro_err_mask] = triangulate_new_landmarks(C_i, F_i, Tau_i, Rt_WC, K, params)
 %TRIANGULATE NEW LANDMARKS triangulates new landmarks using current observations
 %C_i and first observations F_i if the bearing angles exceed a given
 %threshold
