@@ -7,7 +7,7 @@
 
     <point_tracker_levels>5</point_tracker_levels>
     <point_tracker_max_error>0.5</point_tracker_max_error>
-    <ransac_max_error>1.5</ransac_max_error>
+    <ransac_max_error>1</ransac_max_error>
     <point_tracker_block_size>31</point_tracker_block_size>
     
     <candidate_tracker_block_size>31</candidate_tracker_block_size>
@@ -20,15 +20,15 @@
     <max_rp_err_for_triangulation>1</max_rp_err_for_triangulation>
     <use_simple_triangulation_criteria>0</use_simple_triangulation_criteria>
     <reproject_landmarks>0</reproject_landmarks>
-    <depth_thresh>20</depth_thresh>
+    <depth_thresh>5</depth_thresh>
     
     
     <proposal_test_norm>cityblock</proposal_test_norm>
     <min_harris_feature_quality>0.001</min_harris_feature_quality>
     <non_max_suppression_radius>5</non_max_suppression_radius>
-    <candidate_dist_threshold>20</candidate_dist_threshold>
+    <candidate_dist_threshold>10</candidate_dist_threshold>
     <plot_history_length>20</plot_history_length>
-    <min_new_point_distance>10</min_new_point_distance>
+    <min_new_point_distance>24</min_new_point_distance>
     <min_bearing_angle>0.012</min_bearing_angle>
     <harris_min_quality>0.001</harris_min_quality>
     <harris_gaussian_dim>5</harris_gaussian_dim>

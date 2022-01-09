@@ -34,7 +34,7 @@ corners = cornerPoints(c_location, 'Metric', c_metric);
 
 if existing_points
     D = pdist2(existing_points', corners.Location, params.proposal_test_norm, 'Smallest', 1);
-    distinct_points = D > 10;
+    distinct_points = D > params.min_new_point_distance;
     corners = corners(distinct_points);
 end
 % corners = detectHarrisFeatures(img, 'MinQuality', 0.00001, 'FilterSize', 3);

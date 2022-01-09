@@ -30,7 +30,6 @@ elseif ds == 1
     params = readstruct("params/params_malaga.xml","FileType","xml");
 elseif ds == 2
     % Path containing images, depths and all...
-    bootstrap_frames = [20,23];
     parking_path = 'data/parking/';
     assert(exist('parking_path', 'var') ~= 0);
     last_frame = 598;
@@ -93,6 +92,7 @@ elseif ds == 2
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([parking_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
+    bootstrap_frames = [20,23];
 elseif ds == 3
     img0 = rgb2gray(imread([greenhouse_1_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
