@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <struct>
     <bootstrap_repro_error>0.9</bootstrap_repro_error>
-    <num_initial_candidates>150</num_initial_candidates>
-    <num_continous_candidates>120</num_continous_candidates>
+    <num_initial_candidates>160</num_initial_candidates>
+    <num_continous_candidates>160</num_continous_candidates>
     <points_num_target>350</points_num_target>
 
     <point_tracker_levels>5</point_tracker_levels>
@@ -25,15 +25,15 @@
     
     <proposal_test_norm>cityblock</proposal_test_norm>
     <min_harris_feature_quality>0.0005</min_harris_feature_quality>
-    <non_max_suppression_radius>10</non_max_suppression_radius>
+    <non_max_suppression_radius>16</non_max_suppression_radius>
     <candidate_dist_threshold>30</candidate_dist_threshold>
     <plot_history_length>20</plot_history_length>
     <min_new_point_distance>20</min_new_point_distance>
     <min_bearing_angle>0.012</min_bearing_angle>
     <harris_min_quality>0.001</harris_min_quality>
-    <harris_gaussian_dim>5</harris_gaussian_dim>
-    <ba_max_length>10</ba_max_length>
-    <re_init_min_kps>50</re_init_min_kps>
+    <harris_gaussian_dim>3</harris_gaussian_dim>
+    <ba_max_length>15</ba_max_length>
+    <re_init_min_kps>40</re_init_min_kps>
     <re_init_frame_distance>4</re_init_frame_distance>
     
 </struct>

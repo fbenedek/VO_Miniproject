@@ -3,7 +3,8 @@
 clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
-ds = 1; % 0: KITTI, 1: Malaga, 2: parking, 3: greenhouse_1
+ds = 6;
+% 0: KITTI, 1: Malaga, 2: parking, 3-6: greenhouse_i
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -68,6 +69,16 @@ elseif ds == 5
     cameraparams = load([greenhouse_3_path 'K_samsung.mat']);
     K = cameraparams.K;
     params = readstruct("params/params_tomato_dim.xml","FileType","xml");
+elseif ds == 6
+    % Path containing images and calibration data for GH dataset 4
+    % Greenhouse dataset 4 - Lower row
+    % Filtering and downsampling might be needed!
+    greenhouse_4_path = 'data/greenhouse/06_straight_low/';
+    assert(exist('greenhouse_4_path', 'var') ~= 0);
+    last_frame = 400;
+    cameraparams = load([greenhouse_4_path 'K_samsung.mat']);
+    K = cameraparams.K;
+    params = readstruct("params/params_tomato_lower.xml","FileType","xml");
 else
     assert(false);
 end
@@ -94,6 +105,7 @@ elseif ds == 2
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
     bootstrap_frames = [20,23];
 elseif ds == 3
+    bootstrap_frames = [12,16];
     img0 = rgb2gray(imread([greenhouse_1_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([greenhouse_1_path ...
@@ -111,7 +123,10 @@ elseif ds == 5
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([greenhouse_3_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
-
+elseif ds == 6
+    dset_struct = dir(fullfile("data/greenhouse/06_straight_low/images",'*.png'));
+    img0 = rgb2gray(imread([greenhouse_4_path '/images/' dset_struct(bootstrap_frames(1)).name]));
+    img1 = rgb2gray(imread([greenhouse_4_path '/images/' dset_struct(bootstrap_frames(2)).name]));
 else
     assert(false);
 end
@@ -166,6 +181,8 @@ for i = range
     elseif ds == 5
         image = im2uint8(rgb2gray(imread([greenhouse_3_path ...
             sprintf('/images/img_%05d.png',i)])));
+    elseif ds == 6
+        image = rgb2gray(imread([greenhouse_4_path '/images/' dset_struct(i).name]));
     else
         assert(false);
     end
@@ -174,7 +191,6 @@ for i = range
     % Markovian forward iteration
     [S_i, Twc_i] = process_frame(image, S_i, K, params);
     % Twc_i is 4*4 matrix containing the current pose
-    
     [t_WC_hist, n_landmark_hist] = plotState(fig, t_WC_hist, n_landmark_hist, image, S_i, Twc_i,i, params);
     % Makes sure that plots refresh.    
     % Plot results
@@ -185,6 +201,5 @@ for i = range
     % Plot of full estimated trajectory
     % Trajectory of the last 20 frames with 3D projection of landmarks
     pause(0.01);
-    
     prev_img = image;
 end

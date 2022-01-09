@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <struct>
-    <num_initial_candidates>100</num_initial_candidates>
-    <num_continous_candidates>100</num_continous_candidates>
+    <bootstrap_repro_error>0.9</bootstrap_repro_error>
+    <num_initial_candidates>150</num_initial_candidates>
+    <num_continous_candidates>120</num_continous_candidates>
     <points_num_target>350</points_num_target>
 
     <point_tracker_levels>5</point_tracker_levels>
-    <point_tracker_max_error>0.5</point_tracker_max_error>
-    <ransac_max_error>1</ransac_max_error>
+    <point_tracker_max_error>2</point_tracker_max_error>
+    <ransac_max_error>2</ransac_max_error>
     <point_tracker_block_size>31</point_tracker_block_size>
     
     <candidate_tracker_block_size>31</candidate_tracker_block_size>
     <candidate_tracker_levels>5</candidate_tracker_levels>
-    <candidate_tracker_max_error>0.5</candidate_tracker_max_error>
+    <candidate_tracker_max_error>2</candidate_tracker_max_error>
     
     <point_score_thresh>0.90</point_score_thresh>
     <candidate_score_thresh>0.9</candidate_score_thresh>
     
-    <max_rp_err_for_triangulation>2</max_rp_err_for_triangulation>
-    <use_simple_triangulation_criteria>1</use_simple_triangulation_criteria>
+    <max_rp_err_for_triangulation>1.5</max_rp_err_for_triangulation>
+    <use_simple_triangulation_criteria>0</use_simple_triangulation_criteria>
     <reproject_landmarks>0</reproject_landmarks>
+    <depth_thresh>20</depth_thresh>
+    
     
     <proposal_test_norm>cityblock</proposal_test_norm>
-    <min_harris_feature_quality>0.001</min_harris_feature_quality>
-    <non_max_suppression_radius>5</non_max_suppression_radius>
-    <candidate_dist_threshold>5</candidate_dist_threshold>
+    <min_harris_feature_quality>0.0005</min_harris_feature_quality>
+    <non_max_suppression_radius>10</non_max_suppression_radius>
+    <candidate_dist_threshold>30</candidate_dist_threshold>
     <plot_history_length>20</plot_history_length>
-    <min_new_point_distance>5</min_new_point_distance>
-    <min_bearing_angle>0.05</min_bearing_angle>
+    <min_new_point_distance>20</min_new_point_distance>
+    <min_bearing_angle>0.012</min_bearing_angle>
     <harris_min_quality>0.001</harris_min_quality>
     <harris_gaussian_dim>5</harris_gaussian_dim>
     <ba_max_length>10</ba_max_length>
