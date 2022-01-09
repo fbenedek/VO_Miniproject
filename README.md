@@ -1,7 +1,7 @@
 # VO-Miniproject
 This repository contains the code for a MATLAB implementation of a Visual Odometry pipeline developed as a mini-project for the course [Vision Algorithms for Mobile Robots](http://rpg.ifi.uzh.ch/teaching.html) at UZH. 
 
-The pipeline has been qualitatively evaluated on seven different data sets, three of them are the benchmark datasets:
+The pipeline has been qualitatively evaluated on six different data sets, three of them are the benchmark datasets:
   * KITTI
   * Malaga
   * Parking Garage
@@ -10,10 +10,10 @@ The remaining are datasets collected by us, for testing the VO-pipeline in a sig
 
 ## Replicating results
 The parameters used have been slightly tuned to each data set, and have been saved in seperate XML-files that are loaded from the main file alongside the relevant images. To switch between datasets simply change the `ds` parameter at the top of main:
-  - 0: KITTI [video link]()
-  - 1: Malaga [video link]()
-  - 2: Parking garage [video link]()
-  - 3-6: Greenhouses [video link](), [video link](), [video link](), [video link]()
+  - 0: KITTI [video link](https://youtu.be/4XeiFHxf4Sk)
+  - 1: Malaga [video link](https://youtu.be/ptTxC_Pkka8)
+  - 2: Parking garage [video link](https://youtu.be/XaaNMHqJkvc)
+  - 3-5: Greenhouses [video link](https://youtu.be/KdPg5T4fGCE), [video link](https://youtu.be/ZgZsuuS9pY4), [video link](https://youtu.be/dm3dDU9VfY8)
 
 The pipeline has been executed on the following machines:
 - Intel Core i7-1165G7 @ 2.80GHz, 8Gb RAM (MATLAB 2021b, 3650 threads)
