@@ -4,7 +4,7 @@ clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
 ds = 2;
-% 0: KITTI, 1: Malaga, 2: parking, 3-6: greenhouse_i
+% 0: KITTI, 1: Malaga, 2: parking, 3-5: greenhouse_i
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -51,16 +51,6 @@ elseif ds == 3
     params = readstruct("params/params_tomato_long_walk.xml","FileType","xml");
 elseif ds == 4
     % Path containing images and calibration data for GH dataset 1
-    % Greenhouse dataset 2 - Long walk
-    % Filtering and downsampling might be needed!
-    greenhouse_2_path = 'data/greenhouse/05_straight_sunshine/';
-    assert(exist('greenhouse_2_path', 'var') ~= 0);
-    last_frame = 200;
-    cameraparams = load([greenhouse_2_path 'K_samsung.mat']);
-    K = cameraparams.K;
-    params = readstruct("params/params_tomato_sunshine.xml","FileType","xml");
-elseif ds == 5
-    % Path containing images and calibration data for GH dataset 1
     % Greenhouse dataset 4 - Short dim row
     % Filtering and downsampling might be needed!
     greenhouse_3_path = 'data/greenhouse/08_straight_dim/';
@@ -69,7 +59,7 @@ elseif ds == 5
     cameraparams = load([greenhouse_3_path 'K_samsung.mat']);
     K = cameraparams.K;
     params = readstruct("params/params_tomato_dim.xml","FileType","xml");
-elseif ds == 6
+elseif ds == 5
     % Path containing images and calibration data for GH dataset 4
     % Greenhouse dataset 4 - Lower row
     % Filtering and downsampling might be needed!
@@ -114,16 +104,11 @@ elseif ds == 3
     % img0 = img0(1:2:end,1:2:end);
     % img1 = img1(1:2:end,1:2:end);
 elseif ds == 4
-    img0 = rgb2gray(imread([greenhouse_2_path ...
-        sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
-    img1 = rgb2gray(imread([greenhouse_2_path ...
-        sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
-elseif ds == 5
     img0 = rgb2gray(imread([greenhouse_3_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([greenhouse_3_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
-elseif ds == 6
+elseif ds == 5
     dset_struct = dir(fullfile("data/greenhouse/06_straight_low/images",'*.png'));
     img0 = rgb2gray(imread([greenhouse_4_path '/images/' dset_struct(bootstrap_frames(1)).name]));
     img1 = rgb2gray(imread([greenhouse_4_path '/images/' dset_struct(bootstrap_frames(2)).name]));
@@ -176,12 +161,9 @@ for i = range
             sprintf('/images/img_%05d.png',i)])));
         % image = image(1:2:end,1:2:end);
     elseif ds == 4
-        image = im2uint8(rgb2gray(imread([greenhouse_2_path ...
-            sprintf('/images/img_%05d.png',i)])));
-    elseif ds == 5
         image = im2uint8(rgb2gray(imread([greenhouse_3_path ...
             sprintf('/images/img_%05d.png',i)])));
-    elseif ds == 6
+    elseif ds == 5
         image = rgb2gray(imread([greenhouse_4_path '/images/' dset_struct(i).name]));
     else
         assert(false);
