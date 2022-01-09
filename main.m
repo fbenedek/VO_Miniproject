@@ -3,7 +3,7 @@
 clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
-ds = 6;
+ds = 2;
 % 0: KITTI, 1: Malaga, 2: parking, 3-6: greenhouse_i
 
 if ds == 0
@@ -99,11 +99,11 @@ elseif ds == 1
         '/malaga-urban-dataset-extract-07_rectified_800x600_Images/' ...
         left_images(bootstrap_frames(2)).name]));
 elseif ds == 2
+    bootstrap_frames = [20,23];
     img0 = rgb2gray(imread([parking_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([parking_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
-    bootstrap_frames = [20,23];
 elseif ds == 3
     bootstrap_frames = [12,16];
     img0 = rgb2gray(imread([greenhouse_1_path ...
