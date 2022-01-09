@@ -3,7 +3,7 @@
 clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
-ds = 0; % 0: KITTI, 1: Malaga, 2: parking
+ds = 3; % 0: KITTI, 1: Malaga, 2: parking, 3: greenhouse_1
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -15,6 +15,7 @@ if ds == 0
     K = [7.188560000000e+02 0 6.071928000000e+02
         0 7.188560000000e+02 1.852157000000e+02
         0 0 1];
+    params = readstruct("params/params_KITTI.xml","FileType","xml");
 elseif ds == 1
     % Path containing the many fi5374965328684e+03les of Malaga 7.
     malaga_path = 'data/malaga-urban-dataset-extract-07/';
@@ -26,6 +27,7 @@ elseif ds == 1
     K = [621.18428 0 404.0076
         0 621.18428 309.05989
         0 0 1];
+    params = readstruct("params/params_malaga.xml","FileType","xml");
 elseif ds == 2
     % Path containing images, depths and all...
     parking_path = 'data/parking/';
@@ -35,30 +37,37 @@ elseif ds == 2
      
     ground_truth = load([parking_path '/poses.txt']);
     ground_truth = ground_truth(:, [end-8 end]);
+    params = readstruct("params/params_parking.xml","FileType","xml");
 elseif ds == 3
     % Path containing images and calibration data for GH dataset 1
-    % Greenhouse dataset 1 - Machinery
+    % Greenhouse dataset 1 - Long walk 04
     % Filtering and downsampling might be needed!
-    greenhouse_1_path = 'data/greenhouse/01_machinery/';
+    greenhouse_1_path = 'data/greenhouse/04_long_walk/';
     assert(exist('greenhouse_1_path', 'var') ~= 0);
-    last_frame = 598;
-    K = readxlsx([greenhouse_1_path '/cam_intrinsics.xlsx']);
+    last_frame = 939;
+    cameraparams = load([greenhouse_1_path 'K_samsung.mat']);
+    K = cameraparams.K;
+    params = readstruct("params/params_tomato_long_walk.xml","FileType","xml");
 elseif ds == 4
     % Path containing images and calibration data for GH dataset 1
     % Greenhouse dataset 2 - Long walk
     % Filtering and downsampling might be needed!
-    greenhouse_2_path = 'data/greenhouse/02_long_walk/';
+    greenhouse_2_path = 'data/greenhouse/05_straight_sunshine/';
     assert(exist('greenhouse_2_path', 'var') ~= 0);
-    last_frame = 4060;
-    K = readxlsx([greenhouse_2_path '/cam_intrinsics.xlsx']);
+    last_frame = 200;
+    cameraparams = load([greenhouse_2_path 'K_samsung.mat']);
+    K = cameraparams.K;
+    params = readstruct("params/params_tomato_sunshine.xml","FileType","xml");
 elseif ds == 5
     % Path containing images and calibration data for GH dataset 1
-    % Greenhouse dataset 3 - Short row
+    % Greenhouse dataset 4 - Short dim row
     % Filtering and downsampling might be needed!
-    greenhouse_3_path = 'data/greenhouse/03_short_row/';
+    greenhouse_3_path = 'data/greenhouse/08_straight_dim/';
     assert(exist('greenhouse_3_path', 'var') ~= 0);
-    last_frame = 598;
-    K = readxlsx([greenhouse_3_path '/cam_intrinsics.xlsx']);
+    last_frame = 253;
+    cameraparams = load([greenhouse_3_path 'K_samsung.mat']);
+    K = cameraparams.K;
+    params = readstruct("params/params_tomato_dim.xml","FileType","xml");
 else
     assert(false);
 end
@@ -88,6 +97,9 @@ elseif ds == 3
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
     img1 = rgb2gray(imread([greenhouse_1_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(2))]));
+    % downsample the images
+    % img0 = img0(1:2:end,1:2:end);
+    % img1 = img1(1:2:end,1:2:end);
 elseif ds == 4
     img0 = rgb2gray(imread([greenhouse_2_path ...
         sprintf('/images/img_%05d.png',bootstrap_frames(1))]));
@@ -146,6 +158,7 @@ for i = range
     elseif ds == 3
         image = im2uint8(rgb2gray(imread([greenhouse_1_path ...
             sprintf('/images/img_%05d.png',i)])));
+        % image = image(1:2:end,1:2:end);
     elseif ds == 4
         image = im2uint8(rgb2gray(imread([greenhouse_2_path ...
             sprintf('/images/img_%05d.png',i)])));
