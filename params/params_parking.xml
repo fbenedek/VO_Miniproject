@@ -3,7 +3,8 @@
     <num_initial_candidates>100</num_initial_candidates>
     <num_continous_candidates>100</num_continous_candidates>
     <points_num_target>350</points_num_target>
-
+    <bootstrap_repro_error>0.5</bootstrap_repro_error>
+   
     <point_tracker_levels>5</point_tracker_levels>
     <point_tracker_max_error>0.5</point_tracker_max_error>
     <ransac_max_error>1</ransac_max_error>
@@ -19,6 +20,7 @@
     <max_rp_err_for_triangulation>2</max_rp_err_for_triangulation>
     <use_simple_triangulation_criteria>1</use_simple_triangulation_criteria>
     <reproject_landmarks>0</reproject_landmarks>
+    <depth_thresh>20</depth_thresh>
     
     <proposal_test_norm>cityblock</proposal_test_norm>
     <min_harris_feature_quality>0.001</min_harris_feature_quality>
