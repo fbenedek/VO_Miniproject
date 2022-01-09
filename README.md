@@ -16,9 +16,9 @@ The parameters used have been slightly tuned to each data set, and have been sav
   - 3-6: Greenhouses [video link](), [video link](), [video link](), [video link]()
 
 The pipeline has been executed on the following machines:
-- Intel Core i7-1165G7 @ 2.80GHz, 8Gb RAM (MATLAB 3650 threads)
-- Intel Core i7-7700HQ @ 2.80GHz, 8Gb RAM (MATLAB 4400 threads)
-- Intel Core i7-1165G7 @ 2.80GHz, 16Gb RAM (MATLAB )
+- Intel Core i7-1165G7 @ 2.80GHz, 8Gb RAM (MATLAB 2021b, 3650 threads)
+- Intel Core i7-7700HQ @ 2.80GHz, 8Gb RAM (MATLAB R2021a, 4400 threads)
+- Intel Core i7-1165G7 @ 2.80GHz, 16Gb RAM (MATLAB R2021a)
 
 
 ## Tuning the parameters
