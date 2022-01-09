@@ -3,7 +3,7 @@
 clear; close all;
 params = readstruct("params.xml","FileType","xml");
 
-ds = 3; % 0: KITTI, 1: Malaga, 2: parking, 3: greenhouse_1
+ds = 1; % 0: KITTI, 1: Malaga, 2: parking, 3: greenhouse_1
 
 if ds == 0
     % need to set kitti_path to folder containing "05" and "poses"
@@ -30,6 +30,7 @@ elseif ds == 1
     params = readstruct("params/params_malaga.xml","FileType","xml");
 elseif ds == 2
     % Path containing images, depths and all...
+    bootstrap_frames = [20,23];
     parking_path = 'data/parking/';
     assert(exist('parking_path', 'var') ~= 0);
     last_frame = 598;
@@ -74,7 +75,7 @@ end
 
 %% Bootstrap
 % need to set bootstrap_frames
-bootstrap_frames = [20,23];
+bootstrap_frames = [1,3];
 if ds == 0
     img0 = imread([kitti_path '/05/image_0/' ...
         sprintf('%06d.png',bootstrap_frames(1))]);

@@ -35,6 +35,6 @@ end
 
 X_new_in_cur_frame = Rt_CW*[X_new;ones(1,m)];
 repro_err_mask = repro_err < params.max_rp_err_for_triangulation...
-    & X_new_in_cur_frame(3,:) > 0 & X_new_in_cur_frame(3,:) < 500;
+    & X_new_in_cur_frame(3,:) > 0 & X_new_in_cur_frame(3,:) < params.depth_thresh*median(X_new_in_cur_frame(3,:));
 X_new = X_new(1:3, repro_err_mask);
 P_new = C_i(:,repro_err_mask);

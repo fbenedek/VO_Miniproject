@@ -35,15 +35,15 @@ P_i = P_i';
     BA_Point_Tracks_i, BA_Point_Coordinates_i, params);
 
 % figure for debugging
-figure(5)
-imshow(image)
-hold on
-y_from = P_prev(2,:);
-x_from = P_prev(1,:);
-y_to = P_i(2,:);
-x_to = P_i(1,:);
-figure(5)
-plot([x_from; x_to],[y_from; y_to], 'g-', 'Linewidth', 2);
+% figure(5)
+% imshow(image)
+% hold on
+% y_from = P_prev(2,:);
+% x_from = P_prev(1,:);
+% y_to = P_i(2,:);
+% x_to = P_i(1,:);
+% figure(5)
+% plot([x_from; x_to],[y_from; y_to], 'g-', 'Linewidth', 2);
 
 % do RANSAC p3p and get pose
 % NOTE, get_pose seemingly outputs Tcw, not Twc.
@@ -54,8 +54,8 @@ plot([x_from; x_to],[y_from; y_to], 'g-', 'Linewidth', 2);
     BA_Orientations, BA_View_Ids ,params);
 
 % also for figure
-plot(P_i(1,:),P_i(2,:), 'go', 'Linewidth', 2);
-hold off
+% plot(P_i(1,:),P_i(2,:), 'go', 'Linewidth', 2);
+% hold off
 
 if C_i
     % move on to the candidates
