@@ -1,4 +1,4 @@
-function [Twc_i, S_i] = track_and_get_pose(image, S_i, K, params)
+function [Rt_WC, S_i] = track_and_get_pose(image, S_i, K, params)
 % TRACK_AND_GET_POSE track the keypoints and candidates P_i, C_i with KLT
 % trackers KLT_Point_Tracker and KLT_Candidate_Tracker
 % gets the camera pose Twc_i with a p3p (adaptive) ransac
@@ -9,6 +9,7 @@ X_i = S_i.X_i;
 C_i = S_i.C_i;
 F_i = S_i.F_i;
 Tau_i = S_i.Tau_i;
+
 KLT_Point_Tracker = S_i.KLT_Point_Tracker;
 KLT_Candidate_Tracker = S_i.KLT_Candidate_Tracker;
 
@@ -24,18 +25,35 @@ P_prev = P_i;
 P_i = P_i';
 [P_i, P_prev, X_i] = filter_points(P_i, P_prev, X_i, point_scores, point_validity, params);
 
-
-% move on to the candidates
-setPoints(KLT_Candidate_Tracker, C_i');
-[C_i, ~, candidate_scores] = KLT_Candidate_Tracker(image);
-% Transpose C_i to keep conventions
-C_i = C_i';
-% filter similarly to the keypoints
-[C_i, F_i, Tau_i] = filter_candidates(C_i, F_i, Tau_i, candidate_scores, params);
-
+% figure for debugging
+figure(5)
+imshow(image)
+hold on
+y_from = P_prev(2,:);
+x_from = P_prev(1,:);
+y_to = P_i(2,:);
+x_to = P_i(1,:);
+figure(5)
+plot([x_from; x_to],[y_from; y_to], 'g-', 'Linewidth', 2);
 
 % do RANSAC p3p and get pose
-Twc_i = get_pose(P_i, X_i(1:3,:), K, params);
+% NOTE, get_pose seemingly outputs Tcw, not Twc.
+[Rt_WC, P_i, X_i] = get_pose(P_i, X_i(1:3,:), K, params);
+
+% also for figure
+plot(P_i(1,:),P_i(2,:), 'go', 'Linewidth', 2);
+hold off
+
+if C_i
+    % move on to the candidates
+    setPoints(KLT_Candidate_Tracker, C_i');
+    [C_i, candidate_validity, candidate_scores] = KLT_Candidate_Tracker(image);
+    % Transpose C_i to keep conventions
+    C_i = C_i';
+    % filter similarly to the keypoints
+    [C_i, F_i, Tau_i] = filter_candidates(C_i, F_i, Tau_i, candidate_scores,...
+        candidate_validity, params);
+end
 
 % set the output dict
 S_i.P_i = P_i;

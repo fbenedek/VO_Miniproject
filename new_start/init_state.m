@@ -23,14 +23,14 @@ function [S, T_WC] = init_state(P_0, X_0, T_WC, img, params)
 %       T_WC)
 
 
-hold off
-c = double(getCornersSpread(img, [], params.num_initial_candidates, params).Location');
-% figure
-% imshow(img)
-% hold on
-% plot(c2)
-% plot(cornerPoints(c'))
-% hold off
+% find keypoint candidates
+params.use_shi_tomasi = 1;
+if params.use_histeq
+    img = histeq(img);
+end
+c = getCandidateCorners(img,P_0, params);
+% flip to match convention
+c = flipud(c);
 
 S.P_i = P_0;
 S.X_i  = X_0(1:3,:);
@@ -38,14 +38,25 @@ S.C_i  = c;
 S.F_i  = c;
 T_WC_vec = T_WC(:);
 S.Tau_i = repmat(T_WC_vec, 1, size(c,2));
+S.Candidate_Views_i = repmat([1],1,size(c,2));
 % init trackers
-S.KLT_Point_Tracker = vision.PointTracker('NumPyramidLevels', ...
-    params.point_tracker_levels, 'MaxBidirectionalError',params.point_tracker_max_error,...
-    'BlockSize', [params.point_tracker_block_size,params.point_tracker_block_size]);
-S.KLT_Candidate_Tracker = vision.PointTracker('NumPyramidLevels',...
-    params.candidate_tracker_levels, 'MaxBidirectionalError',params.candidate_tracker_max_error,...
-    'BlockSize', [params.candidate_tracker_block_size,params.candidate_tracker_block_size]);
+S.KLT_Point_Tracker = vision.PointTracker();
+S.KLT_Candidate_Tracker = vision.PointTracker();
 initialize(S.KLT_Point_Tracker, S.P_i', img);
 initialize(S.KLT_Candidate_Tracker, S.C_i', img);
+S.KLT_Candidate_Tracker.BlockSize = [15,15];
+S.KLT_Point_Tracker.BlockSize = [15,15];
+S.KLT_Point_Tracker.MaxBidirectionalError = 1;
+S.Locations = [0 0 0];
+S.Orientations = reshape(eye(3),1,3,3);
+S.Prev_Pose_CW = [eye(3), [0; 0; 0]];
+S.Point_Tracks_i = {};
+S.View_Ids = [1];
+for i = 1:length(P_0)
+    S.Point_Tracks_i{end + 1} = [1];
+end
+S.Point_Coordinates_i = {};
+for i = 1:length(P_0)
+    S.Point_Coordinates_i{end + 1} = P_0(:,i)';
 end
 

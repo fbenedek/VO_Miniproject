@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<struct>
+    <use_histeq>1</use_histeq>
+    <corner_patch_size>9</corner_patch_size>
+    <num_new_candidates>170</num_new_candidates>
+    <nonmaximum_supression_radius>32</nonmaximum_supression_radius>
+    <existing_nonmaximum_supression_radius>32</existing_nonmaximum_supression_radius>
+    <harris_kappa>0.15</harris_kappa>
+    <use_shi_tomasi>0</use_shi_tomasi>
+    <candidate_dist_threshold>10</candidate_dist_threshold>
+    <plot_history_length>20</plot_history_length>
+</struct>
